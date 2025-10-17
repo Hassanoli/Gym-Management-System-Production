@@ -23,6 +23,9 @@ namespace GymManagementDAL.Repositories.Classes
 
         public void Delete(int id) => _dbcontext.Set<TEntity>().Remove(new TEntity() { Id = id });
 
+        public void Delete(TEntity entity) => _dbcontext.Set<TEntity>().Remove(entity);
+
+
         public IEnumerable<TEntity> GetAll(Func<TEntity, bool>? condition = null)
         {
             if(condition is null)
