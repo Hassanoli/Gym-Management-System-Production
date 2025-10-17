@@ -1,4 +1,6 @@
+﻿using GymManagementBLL;
 using GymManagementDAL.Data.Context;
+using GymManagementDAL.Data.DataSeed;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Classes;
 using GymManagementDAL.Repositories.Interfaces;
@@ -10,7 +12,11 @@ namespace GymManagementPL
     {
         public static void Main(string[] args)
         {
+            #region 🔧 Builder Configuration
             var builder = WebApplication.CreateBuilder(args);
+            #endregion
+
+            #region 🧩 Services Registration
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -31,12 +37,30 @@ namespace GymManagementPL
             //builder.Services.AddScoped<GenericRepository<Trainer>, GenericRepository<Trainer>>();
             //builder.Services.AddScoped<GenericRepository<Plan>, GenericRepository<Plan>>();
             *********************************************/
-                
+
             //builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             //builder.Services.AddScoped<IPlanRepository, PlanRepository>();
-            builder.Services.AddScoped<IUintOfWork , UintOfWork>();
+            builder.Services.AddScoped<IUintOfWork, UintOfWork>();
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+            builder.Services.AddAutoMapper(X => X.AddProfile(new MappingProfiles()));
 
+            #endregion
+
+            #region 🚀 App Build
             var app = builder.Build();
+
+            #region Seed Data -Migrate Database
+            using var Scoped = app.Services.CreateScope();
+            var dbContext = Scoped.ServiceProvider.GetRequiredService<GymDbContext>();
+            var PendingMigartions = dbContext.Database.GetPendingMigrations();
+            if (PendingMigartions?.Any() ?? false)
+                dbContext.Database.Migrate();
+            GymDbContextDataSeeding.SeedData(dbContext);
+
+            #endregion
+            #endregion
+
+            #region ⚙️ Middleware Configuration
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -51,13 +75,19 @@ namespace GymManagementPL
 
             app.UseAuthorization();
 
+            #endregion
+
+            #region 🗺️ Endpoint Mapping
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
+            #endregion
 
+            #region ▶️ Run Application
             app.Run();
+            #endregion
         }
     }
 }

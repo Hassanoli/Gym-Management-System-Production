@@ -21,7 +21,7 @@ namespace GymManagementDAL.Data.Configurations
                    .HasForeignKey<HealthRecord>(x => x.Id);
 
             builder.Ignore(x => x.CreatedAt);
-            builder.Ignore(x => x.UpdatededAt);
+            builder.Ignore(x => x.UpdatedAt);
 
         }
     }
