@@ -1,18 +1,18 @@
 ﻿using GymManagementDAL.Entities;
 using System;
 using System.Collections.Generic;
+using System.Formats.Tar;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GymManagementDAL.Repositories.Interfaces
 {
-    internal interface IPlanRepository
+    public interface IUintOfWork
     {
-        IEnumerable<Plan> GetAll();
-        Plan? GetById(int id);
-        int Add(Plan plan);
-        int Update(Plan plan);
-        int Delete(int id);
+        IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntitiy, new();
+
+        int SaveChanges();
+
     }
 }
