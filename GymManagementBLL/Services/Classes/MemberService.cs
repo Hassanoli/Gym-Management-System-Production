@@ -9,50 +9,31 @@ using System.Linq;
 
 namespace GymManagementBLL.Services.Classes
 {
-    internal class MemberService : IMemberServices
+    public class MemberService : IMemberServices
     {
+        #region Fields & Constructor
         private readonly IUintOfWork _uintOfWork;
         private readonly IMapper _mapper;
 
-        //// ========== Repositories ==========
-        //private readonly IGenericRepository<Member> _memberRepository;
-        //private readonly IGenericRepository<MemberShip> _memberShipRepository;
-        //private readonly IPlanRepository _planRepository;
-        //private readonly IGenericRepository<HealthRecord> _healthrecordRepository;
-        //private readonly IGenericRepository<MemberSession> _memberSessionrepository;
-
-        // ========== Constructor ==========
-        //public MemberService(
-        //    IGenericRepository<Member> memberRepository,
-        //    IGenericRepository<MemberShip> memberShipRepository,
-        //    IPlanRepository planRepository,
-        //    IGenericRepository<HealthRecord> healthrecordRepository,
-        //    IGenericRepository<MemberSession> memberSessionrepository)
-        //{
-        //    _memberRepository = memberRepository;
-        //    _memberShipRepository = memberShipRepository;
-        //    _planRepository = planRepository;
-        //    _healthrecordRepository = healthrecordRepository;
-        //    _memberSessionrepository = memberSessionrepository;
-        //}
-        public MemberService(IUintOfWork uintOfWork , IMapper mapper)
+        public MemberService(IUintOfWork uintOfWork, IMapper mapper)
         {
             _uintOfWork = uintOfWork;
             _mapper = mapper;
         }
+        #endregion
 
-        // ========== Get All Members ==========
+        #region Get All Members
         public IEnumerable<MemberViewModel> GetAllMbers()
         {
-            var members = _uintOfWork.GetRepository<Member>().GetAll();
+            var Members = _uintOfWork.GetRepository<Member>().GetAll();
+            if (Members == null || !Members.Any()) return [];
 
-            if (members == null || !members.Any())
-                return Enumerable.Empty<MemberViewModel>();
-
-            return _mapper.Map<IEnumerable<MemberViewModel>>(members);
+            var MemberViewModels = _mapper.Map<IEnumerable<MemberViewModel>>(Members);
+            return MemberViewModels;
         }
+        #endregion
 
-        // ========== Create Member ==========
+        #region Create Member
         public bool CreateMember(CreateMemberViewModel createMember)
         {
             try
@@ -64,13 +45,15 @@ namespace GymManagementBLL.Services.Classes
                 _uintOfWork.GetRepository<Member>().Add(member);
                 return _uintOfWork.SaveChanges() > 0;
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                Console.WriteLine($"Error in CreateMember: {ex.Message}");
+                throw;
             }
         }
+        #endregion
 
-        // ========== Get Member Details ==========
+        #region Get Member Details
         public MemberViewModel? GetMemberDeails(int MemberId)
         {
             var member = _uintOfWork.GetRepository<Member>().GetById(MemberId);
@@ -92,17 +75,20 @@ namespace GymManagementBLL.Services.Classes
 
             return viewModel;
         }
+        #endregion
 
-        // ========== Get Health Record ==========
+        #region Get Health Record
         public HealthRecordViewModel? GetMemberHealthRecordDetails(int Memberid)
         {
+            // Based on your ModelSnapshot, HealthRecord is mapped to the Members table.
             var memberHealthRecord = _uintOfWork.GetRepository<HealthRecord>().GetById(Memberid);
             if (memberHealthRecord == null) return null;
 
             return _mapper.Map<HealthRecordViewModel>(memberHealthRecord);
         }
+        #endregion
 
-        // ========== Get Member to Update ==========
+        #region Get Member for Update
         public MemberToUpdateViewModel? GetMemberToUpdate(int MemberId)
         {
             var member = _uintOfWork.GetRepository<Member>().GetById(MemberId);
@@ -110,14 +96,23 @@ namespace GymManagementBLL.Services.Classes
 
             return _mapper.Map<MemberToUpdateViewModel>(member);
         }
+        #endregion
 
-        // ========== Update Member ==========
+        #region Update Member
         public bool UpdateMemberDetails(int Id, MemberToUpdateViewModel memberToUpdate)
         {
             try
             {
-                if (IsEmailExists(memberToUpdate.Email) || IsPhoneExists(memberToUpdate.Phone))
-                    return false;
+                var emailexits = _uintOfWork.GetRepository<Member>()
+                    .GetAll(X => X.Email == memberToUpdate.Email && X.Id != Id)
+                    .Any();
+
+                var phoneexists = _uintOfWork.GetRepository<Member>()
+                    .GetAll(X => X.Phone == memberToUpdate.Phone && X.Id != Id)
+                    .Any();
+
+                if (emailexits || phoneexists) return false;
+
 
                 var MemberRepo = _uintOfWork.GetRepository<Member>();
                 var member = MemberRepo.GetById(Id);
@@ -127,58 +122,83 @@ namespace GymManagementBLL.Services.Classes
                 member.UpdatedAt = DateTime.Now;
                 return _uintOfWork.SaveChanges() > 0;
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine($"--- UPDATE FAILED: {ex.Message} ---");
                 return false;
             }
         }
-
-        // ========== Remove Member ==========
+        #endregion
+ 
+        #region Remove Member
         public bool RemoveMember(int MemberId)
         {
             try
             {
+             
+                if (HasActiveSessions(MemberId))
+                    return false;
+             
+                var memberRepo = _uintOfWork.GetRepository<Member>();
+                memberRepo.Delete(MemberId);
 
-                var member = _uintOfWork.GetRepository<Member>().GetById(MemberId);
-                if (member == null) return false;
-
-                var HasActiveMemberSessions = _uintOfWork.GetRepository<MemberSession>()
-                    .GetAll(X => X.MemberId == MemberId && X.Session.StartDate > DateTime.Now)
-                    .Any();
-
-                if (HasActiveMemberSessions) return false;
-
-
-                var MemberShipRepo = _uintOfWork.GetRepository<MemberShip>();
-                var MemberShips = MemberShipRepo.GetAll(X => X.MemberId == MemberId);
-
-                if (MemberShips.Any())
-                {
-                    foreach (var memberShip in MemberShips)
-                        MemberShipRepo.Delete(memberShip.Id); // ✅ استخدم الـ Id
-                }
-
-                _uintOfWork.GetRepository<Member>().Delete(member.Id);
-
-                return _uintOfWork.SaveChanges() > 0 ;// ✅ استخدم الـ Id
+                return _uintOfWork.SaveChanges() > 0;
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                Console.WriteLine($"--- DELETE FAILED: {ex.Message} ---");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"--- INNER EX: {ex.InnerException.Message} ---");
+                }
+                return false; 
             }
         }
+        #endregion
 
-        // ========== Helper Methods ==========
         #region Helper Methods
-        private bool IsEmailExists(string Email)
+        public bool IsEmailExists(string Email)
         {
             return _uintOfWork.GetRepository<Member>().GetAll(X => X.Email == Email).Any();
         }
 
-        private bool IsPhoneExists(string Phone)
+        public bool IsPhoneExists(string Phone)
         {
             return _uintOfWork.GetRepository<Member>().GetAll(X => X.Phone == Phone).Any();
         }
+
+        public bool IsEmailExists(string Email, int memberIdToExclude)
+        {
+            return _uintOfWork.GetRepository<Member>()
+                .GetAll(X => X.Email == Email && X.Id != memberIdToExclude)
+                .Any();
+        }
+
+        public bool IsPhoneExists(string Phone, int memberIdToExclude)
+        {
+            return _uintOfWork.GetRepository<Member>()
+                .GetAll(X => X.Phone == Phone && X.Id != memberIdToExclude)
+                .Any();
+        }
+
+        // This method is correct and still needed
+        public bool HasActiveSessions(int MemberId)
+        {
+            var memberSessions = _uintOfWork.GetRepository<MemberSession>()
+                .GetAll(x => x.MemberId == MemberId)
+                .ToList();
+
+            if (!memberSessions.Any()) return false;
+
+            var sessionIds = memberSessions.Select(s => s.SessionId).ToList();
+
+            bool hasActiveMemberSessions = _uintOfWork.GetRepository<Session>()
+                .GetAll(x => sessionIds.Contains(x.Id) && x.StartDate > DateTime.Now)
+                .Any();
+
+            return hasActiveMemberSessions;
+        }
         #endregion
+
     }
 }

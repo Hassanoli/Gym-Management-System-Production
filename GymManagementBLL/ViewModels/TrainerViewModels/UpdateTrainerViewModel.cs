@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementBLL.ViewModels.TrainerViewModels
 {
-    internal class UpdateTrainerViewModel
+    public class UpdateTrainerViewModel
     {
         #region TrainerId
         [Required(ErrorMessage = "Trainer ID is required.")]

@@ -1,0 +1,141 @@
+﻿@model GymManagementBLL.ViewModels.TrainerViewModels.TrainerToUpdateViewModel
+@using GymManagementDAL.Entities.ENUMS
+
+@{
+    ViewData["Title"] = $"Edit Trainer - {Model.Name}"; // Dynamic page title using the Name from the Model
+}
+
+<div class="container mt-4">
+    <header class="mb-4 d-flex justify-content-between align-items-center">
+        <div>
+            <h3 class="text-primary-color mb-0">Edit Trainer</h3>
+            <p class="text-muted mb-0">Update trainer information</p> @* Moved paragraph here *@
+        </div>
+        <a asp-action="Index" asp-controller="Trainer" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Back to List
+        </a>
+    </header>
+
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-8">
+            @* Slightly wider column *@
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
+                    <div class="mb-4 pb-3 border-bottom">
+                        <small class="text-muted d-block mb-1">Editing Profile For</small>
+                        <h4 class="mb-0 text-black">@Model.Name</h4> @* Display the Name from the Model *@
+                    </div>
+
+                    <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                        @* Ensure the route ID is included *@
+                        @Html.AntiForgeryToken()
+
+                        @* Display validation summary *@
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            Please correct the errors below.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        @* Add a hidden field for Name if you need it available on POST *without* an input field *@
+                        <input type="hidden" asp-for="Name" />
+
+                        <div class="section-header mb-3">
+                            <h5 class="text-primary fw-bold">Personal & Contact Information</h5>
+                            <hr class="mt-2">
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label"></label>
+                                <input asp-for="Email" type="email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Phone" class="form-label"></label>
+                                <input asp-for="Phone" type="tel" class="form-control" />
+                                <span asp-validation-for="Phone" class="text-danger small"></span>
+                            </div>
+                            @* Assuming DateOfBirth and Gender are NOT editable in this view based on your HTML *@
+                            @* If they ARE editable, uncomment and adjust these sections:
+                            <div class="col-md-6">
+                                <label asp-for="DateOfBirth" class="form-label"></label>
+                                <input asp-for="DateOfBirth" type="date" class="form-control" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")"/>
+                                <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Gender" class="form-label"></label>
+                                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-select">
+                                    <option value="">-- Select Gender --</option>
+                                </select>
+                                <span asp-validation-for="Gender" class="text-danger small"></span>
+                            </div>
+                            *@
+                            @* Add hidden fields for properties not shown in the form but needed by the model *@
+                            <input type="hidden" asp-for="DateOfBirth" />
+                            <input type="hidden" asp-for="Gender" />
+                        </div>
+
+                        <div class="section-header mb-3">
+                            <h5 class="text-primary fw-bold">Address Information</h5>
+                            <hr class="mt-2">
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="BuildingNumber" class="form-label"></label>
+                                <input asp-for="BuildingNumber" type="number" class="form-control" />
+                                <span asp-validation-for="BuildingNumber" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Street" class="form-label"></label>
+                                <input asp-for="Street" type="text" class="form-control" />
+                                <span asp-validation-for="Street" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="City" class="form-label"></label>
+                                <input asp-for="City" type="text" class="form-control" />
+                                <span asp-validation-for="City" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="section-header mb-3">
+                            <h5 class="text-primary fw-bold">Professional Information</h5>
+                            <hr class="mt-2">
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="Specialties" class="form-label fw-semibold d-block mb-2">
+                                    Specializations <span class="text-danger">*</span>
+                                </label>
+                                @foreach (var specialty in Enum.GetValues(typeof(Specialties)).Cast<Specialties>())
+                                {
+                                    <div class="form-check form-check-inline">
+                                        <input asp-for="Specialties" type="radio" value="@specialty" class="form-check-input" id="specialty-@specialty.ToString()" />
+                                        <label class="form-check-label" for="specialty-@specialty.ToString()">@specialty.ToString()</label>
+                                    </div>
+                                }
+                                <span asp-validation-for="Specialties" class="text-danger small d-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                            <a asp-action="Index" asp-controller="Trainer" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-lg me-1"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-fill px-4">
+                                <i class="bi bi-check-lg me-1"></i>Update Trainer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        // Include client-side validation scripts
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

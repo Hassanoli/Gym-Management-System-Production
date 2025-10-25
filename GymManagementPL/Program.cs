@@ -46,6 +46,9 @@ namespace GymManagementPL
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
             builder.Services.AddAutoMapper(X => X.AddProfile(new MappingProfiles()));
             builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
+            builder.Services.AddScoped<IMemberServices, MemberService>();
+            builder.Services.AddScoped<ITrainerServices, TrainerService>();
+
 
             #endregion
 
@@ -95,7 +98,7 @@ namespace GymManagementPL
             #endregion
 
             #region ▶️ Run Application
-            //app.UseStaticFiles();
+            app.UseStaticFiles();
             app.Run();
             #endregion
         }

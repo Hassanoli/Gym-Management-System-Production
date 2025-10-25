@@ -1,69 +1,7 @@
-﻿@using GymManagementBLL.ViewModels.AnalyticsViewModel
-@model AnalyticsViewModel
-<!DOCTYPE html>
-<html lang="en">
+﻿@model AnalyticsViewModel
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@400..800&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
-          rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
-    <!-- ^ Bootstrap 5.3.8 css file -->
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <!-- ^ Our main css file -->
-    <link rel="stylesheet" href="~/css/style.css" />
-    <title>Power fitness | Home</title>
-</head>
 
-<body>
-    <header>
-        <!-- ^ navbar -->
-        <nav class="navbar navbar-expand-lg bg-white my-3">
-            <div class="container">
-                <a class="navbar-brand" href="#">
-                    <img src="~/images/logo.jpg" alt="" />
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav m-auto mb-2 mb-lg-0 mt-3 mt-lg-0">
-                        <li class="nav-item">
-                        <li class="nav-item">
-                            <a class="nav-link active px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">Members</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">Trainers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">Sessions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">Plans</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">Memberships</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">Sessions Schedule</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
             <div class="row">
                 <div class="col-md-6 col-lg-7 col-12">
                     <div class="info mt-4">
@@ -107,7 +45,7 @@
                             <div class="row g-0">
                                 <div class="col-4">
                                     <div class="stat">
-                                        <span class="fw-bolder fs-5 d-block mb-1">@Model.UpcomingSessions</span>
+                                        <span class="fw-bolder fs-5 d-block mb-1">@Model.TotalTrainers</span>
                                         <h3 class="fs-5 fw-normal">Upcoming Sessions</h3>
                                     </div>
                                 </div>
@@ -403,10 +341,10 @@
                 <div class="bar bg-primary-color d-flex py-4 text-white fw-bolder align-items-center">
                     <p class="py-0 my-0 overflow-hidden text-nowrap">
                         outdoor & online trainers
-                        <img src=".~/images/star.svg" alt="star icon" /> personal training
-                        <img src=".~/images/star.svg" alt="star icon" /> live classes
-                        <img src=".~/images/star.svg" alt="star icon" /> personal trainers
-                        <img src=".~/images/star.svg" alt="star icon" /> personal training
+                        <img src="~/images/star.svg" alt="star icon" /> personal training
+                        <img src="~/images/star.svg" alt="star icon" /> live classes
+                        <img src="~/images/star.svg" alt="star icon" /> personal trainers
+                        <img src="~/images/star.svg" alt="star icon" /> personal training
                     </p>
                 </div>
 
@@ -416,7 +354,7 @@
                             <div class="logo">
                                 <div class="inner">
                                     <div class="image">
-                                        <img src=".~/images/logo.jpg" alt="our logo" />
+                                        <img src="~/images/logo.jpg" alt="our logo" />
                                     </div>
                                     <p class="fs-18 mt-2">
                                         Push harder, go further. Your <br />
@@ -431,14 +369,14 @@
                                 <ul>
                                     <li class="d-flex align-items-center gap-2">
                                         <div class="icon">
-                                            <img src=".~/images/phone icon.jpg" alt="phone icon" />
+                                            <img src="~/images/phone icon.jpg" alt="phone icon" />
                                         </div>
                                         <p>+91 123 456 789</p>
                                     </li>
 
                                     <li class="d-flex align-items-center gap-2">
                                         <div class="icon">
-                                            <img src=".~/images/message icon.jpg" alt="message icon" />
+                                            <img src="~/images/message icon.jpg" alt="message icon" />
                                         </div>
                                         <p>info@gmail.com</p>
                                     </li>
@@ -466,8 +404,3 @@
                     </div>
                 </div>
             </footer>
-
-        </main>
-    </div>
-</body>
-</html>

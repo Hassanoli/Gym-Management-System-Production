@@ -39,9 +39,7 @@ namespace GymManagementBLL.ViewModels.MemberViewModel
         #endregion
 
         #region Address
-        [Required(ErrorMessage = "Address is required.")]
-        [StringLength(100, MinimumLength = 5, ErrorMessage = "Address length must be between 5 and 100 characters.")]
-        public string Address { get; set; } = null!;
+      
         #endregion
 
         #region Date Of Birth
