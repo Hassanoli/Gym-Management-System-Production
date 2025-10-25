@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Delete Trainer";
+  
+    var trainerName = ViewBag.TrainerName ?? "this trainer"; 
+    var trainerId = ViewBag.TrainerId ?? 0;
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            @* Adjusted column width *@
+            <div class="card p-4 p-md-5 shadow text-center border-0">
+                @* Adjusted padding & removed border *@
+
+                <div class="mb-4">
+                    <i class="bi bi-exclamation-triangle-fill text-danger display-4"></i> @* Warning Icon *@
+                </div>
+
+                <p class="fs-4 text-dark mb-3">
+                    @* Adjusted font size & color *@
+                    Are you sure you want to delete <strong class="text-primary-color">@trainerName</strong>?
+                </p>
+
+                <div class="alert alert-danger text-start small" role="alert">
+                    @* Changed alert color to danger, used small class *@
+                    <strong>Warning!</strong> This action cannot be undone. All trainer data, including assigned sessions (if any past ones exist), will be permanently deleted.
+                </div>
+
+                <form asp-action="Delete" method="post" class="mt-4">
+                    @* Point POST to the Delete action (which routes to DeleteConfirmed) *@
+                    @Html.AntiForgeryToken()
+                    @* Hidden input to send the ID back to the controller *@
+                    <input type="hidden" name="id" value="@trainerId" />
+
+                    <div class="buttons d-flex justify-content-center gap-3 mt-4">
+                        @* Centered buttons *@
+                        <a asp-controller="Trainer" asp-action="Index" class="btn btn-outline-secondary px-4">
+                            @* Secondary outline style *@
+                            <i class="bi bi-x-lg me-1"></i> No, Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger px-4">
+                            @* Danger button style *@
+                            <i class="bi bi-trash me-1"></i> Yes, Delete
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@* No specific scripts needed for this view *@

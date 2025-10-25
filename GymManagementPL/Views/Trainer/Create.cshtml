@@ -1,0 +1,130 @@
+﻿@model GymManagementBLL.ViewModels.TrainerViewModels.CreateTrainerViewModel
+@using GymManagementDAL.Entities.ENUMS
+
+@{
+    ViewData["Title"] = "Add New Trainer";
+}
+
+<div class="container mt-4">
+    <header class="mb-4 d-flex justify-content-between align-items-center">
+        @* Flexbox for alignment *@
+        <h3 class="text-primary-color mb-0">@ViewData["Title"]</h3>
+        <a asp-action="Index" asp-controller="Trainer" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Back to List
+        </a>
+    </header>
+
+    <form method="post" asp-action="Create" asp-controller="Trainer">
+        @Html.AntiForgeryToken() @* Security token *@
+
+        @* Display summary of errors not tied to a specific field *@
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible fade show" role="alert">
+            Please correct the errors below.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+
+        <div class="section-header mb-3 mt-4">
+            @* Added top margin *@
+            <h5 class="text-primary fw-bold">Personal Information</h5>
+            <hr class="mt-2">
+        </div>
+        <div class="row g-3 mb-3">
+            @* Added bottom margin *@
+            <div class="col-12 col-md-6">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" type="text" class="form-control" placeholder="Enter full name" /> @* Added placeholder *@
+                <span asp-validation-for="Name" class="text-danger small"></span> @* Added small class *@
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" type="email" class="form-control" placeholder="example@domain.com" /> @* Changed type & added placeholder *@
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="Phone" class="form-label"></label>
+                <input asp-for="Phone" type="tel" class="form-control" placeholder="e.g., 01xxxxxxxxx" /> @* Changed type & added placeholder *@
+                <span asp-validation-for="Phone" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="DateOfBirth" class="form-label"></label>
+                <input asp-for="DateOfBirth" type="date" class="form-control"
+                       value="@(Model?.DateOfBirth.ToString("yyyy-MM-dd") ?? DateTime.Now.AddYears(-20).ToString("yyyy-MM-dd"))" /> @* Default to 20 years ago if null *@
+                <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="Gender" class="form-label"></label>
+                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-select">
+                    <option value="">-- Select Gender --</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="section-header mb-3 mt-4">
+            <h5 class="text-primary fw-bold">Address Information</h5>
+            <hr class="mt-2">
+        </div>
+        <div class="row g-3 mb-3">
+            <div class="col-12 col-md-6">
+                <label asp-for="BuildingNumber" class="form-label"></label>
+                <input asp-for="BuildingNumber" type="number" class="form-control" placeholder="Building No." /> @* Changed type & added placeholder *@
+                <span asp-validation-for="BuildingNumber" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="Street" class="form-label"></label>
+                <input asp-for="Street" type="text" class="form-control" placeholder="Street Name" /> @* Added placeholder *@
+                <span asp-validation-for="Street" class="text-danger small"></span>
+            </div>
+            <div class="col-12 col-md-6">
+                <label asp-for="City" class="form-label"></label>
+                <input asp-for="City" type="text" class="form-control" placeholder="City Name" /> @* Added placeholder *@
+                <span asp-validation-for="City" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="section-header mb-3 mt-4">
+            <h5 class="text-primary fw-bold">Professional Information</h5>
+            <hr class="mt-2">
+        </div>
+        <div class="row g-3">
+            <div class="col-12">
+                <label asp-for="Specialties" class="form-label fw-semibold d-block mb-2">
+                    @* Display block and add margin *@
+                    Specializations <span class="text-danger">*</span>
+                </label>
+                @* Loop through Enum values to create radio buttons *@
+                @foreach (var specialty in Enum.GetValues(typeof(Specialties)).Cast<Specialties>())
+                {
+                    <div class="form-check form-check-inline">
+                        @* Display options inline *@
+                        <input asp-for="Specialties" type="radio" value="@specialty" class="form-check-input" id="specialty-@specialty.ToString()" />
+                        <label class="form-check-label" for="specialty-@specialty.ToString()">@specialty.ToString()</label>
+                    </div>
+                }
+                <span asp-validation-for="Specialties" class="text-danger small d-block"></span> @* Display block for error message *@
+            </div>
+        </div>
+
+        <footer class="d-flex justify-content-end mt-4 mb-4">
+            @* Added bottom margin *@
+            <a asp-action="Index" asp-controller="Trainer" class="btn btn-outline-secondary me-2">Cancel</a>
+            <button type="submit" class="btn btn-fill px-4">
+                @* Added padding *@
+                <i class="bi bi-plus-circle me-1"></i> Add Trainer
+            </button>
+        </footer>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        // Include client-side validation scripts
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

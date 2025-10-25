@@ -1,0 +1,150 @@
+﻿@model CreateMemberViewModel
+<div class="container">
+    <main role="main" class="pb-3">
+
+        <header class="mb-4">
+            <h3 class="text-primary-color">Add Member</h3>
+        </header>
+        @Html.ValidationMessage("DataInvalid", new { @class = "text-danger" })
+
+        <form asp-action="CreateMember" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <!-- Step navigation -->
+            <ul class="nav nav-tabs mb-4" id="addMemberTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="member-tab" data-bs-toggle="tab"
+                            data-bs-target="#member-info" type="button" role="tab">
+                        Member Info
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="health-tab" data-bs-toggle="tab" data-bs-target="#health-info"
+                            type="button" role="tab">
+                        Health Data
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Tab content -->
+            <div class="tab-content">
+                <!-- Member Info -->
+                <div class="tab-pane fade show active" id="member-info" role="tabpanel"
+                     aria-labelledby="member-tab">
+                    <div class="section-header mb-3">
+                        <h5 class="text-primary fw-bold">Personal Information</h5>
+                        <hr class="mt-2">
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label asp-for="Name" class="form-label"></label>
+                            <input asp-for="Name" type="text" class="form-control"/>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" type="text" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="Phone" class="form-label"></label>
+                            <input asp-for="Phone" type="text" class="form-control" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label asp-for="DateOfBirth" class="form-label"></label>
+                            <input asp-for="DateOfBirth" type="date" class="form-control" />
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="Gender" class="form-label"></label>
+                            <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-select">
+                                <option value="">-- Select Gender --</option>
+                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="section-header mb-3 mt-4">
+                        <h5 class="text-primary fw-bold">Address Information</h5>
+                        <hr class="mt-2">
+                    </div>
+                    <div class="row g-3">
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="BuildingNumber" class="form-label"></label>
+                            <input asp-for="BuildingNumber" type="text" class="form-control" />
+                            <span asp-validation-for="BuildingNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="Street" class="form-label"></label>
+                            <input asp-for="Street" type="text" class="form-control" />
+                            <span asp-validation-for="Street" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label asp-for="City" class="form-label"></label>
+                            <input asp-for="City" type="text" class="form-control" />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Data -->
+                <div class="tab-pane fade" id="health-info" role="tabpanel" aria-labelledby="health-tab">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label asp-for="HealthRecordViewModel.Height" class="form-label"></label>
+                            <input asp-for="HealthRecordViewModel.Height" type="text" class="form-control" />
+                            <span asp-validation-for="HealthRecordViewModel.Height" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="HealthRecordViewModel.Weight" class="form-label"></label>
+                            <input asp-for="HealthRecordViewModel.Weight" type="text" class="form-control" />
+                            <span asp-validation-for="HealthRecordViewModel.Weight" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="HealthRecordViewModel.BloodType" class="form-label"></label>
+                            <select asp-for="HealthRecordViewModel.BloodType" class="form-select">
+                                <option value="">Select</option>
+                                <option>A+</option>
+                                <option>A-</option>
+                                <option>B+</option>
+                                <option>B-</option>
+                                <option>O+</option>
+                                <option>O-</option>
+                                <option>AB+</option>
+                                <option>AB-</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label asp-for="HealthRecordViewModel.Note" class="form-label"></label>
+                            <input asp-for="HealthRecordViewModel.Note" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="d-flex justify-content-end gap-3 mt-4">
+                <a asp-controller="Member" asp-action="Index" class="btn btn-outline-secondary px-4">
+                    <i class="bi bi-arrow-left me-2"></i> Back to List
+                </a>
+
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="bi bi-plus-circle me-2"></i> Add
+                </button>
+            </footer>
+
+        </form>
+
+    </main>
+</div>
+@section Scripts
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+}

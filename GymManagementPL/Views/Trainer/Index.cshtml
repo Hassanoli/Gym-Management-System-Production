@@ -1,0 +1,144 @@
+﻿@model IEnumerable<GymManagementBLL.ViewModels.TrainerViewModels.TrainerViewModel>
+@{
+    ViewData["Title"] = "Trainers";
+}
+
+@if (TempData["SuccessMessage"] is not null)
+{
+    <div id="AlertSuccess" class="alert alert-success alert-dismissible fade show mt-3">
+        @* Unique ID *@
+        <i class="bi bi-check-circle-fill me-2"></i>
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] is not null)
+{
+    <div id="AlertError" class="alert alert-danger alert-dismissible fade show mt-3">
+        @* Unique ID *@
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="container">
+    <header class="d-flex justify-content-between mt-5 mb-4 align-items-center">
+        <div>
+            <h2 class="text-primary-color mb-0">Our Trainers</h2>
+            <p class="text-muted">Professional fitness instructors</p>
+        </div>
+        <a asp-controller="Trainer" asp-action="Create"
+           class="btn btn-fill fw-medium rounded-pill px-4 py-3">
+            <i class="bi bi-plus-lg me-2"></i>Add Trainer
+        </a>
+    </header>
+
+    @if (Model != null && Model.Any()) // Check if the model contains any trainers
+    {
+        <div class="table-responsive" style="overflow: visible;">
+            <table class="table table-borderless table-hover align-middle">
+                @* Added hover effect & vertical align *@
+                <thead>
+                    <tr class="table-light">
+                        @* Light background for header *@
+                        <th><span>@nameof(TrainerViewModel.Name)</span></th>
+                        <th><span>@nameof(TrainerViewModel.Email)</span></th>
+                        <th><span>@nameof(TrainerViewModel.Phone)</span></th>
+                        <th><span>@nameof(TrainerViewModel.Specialties)</span></th>
+                        <th class="text-end"><span>Action</span></th> @* Align action header to the right *@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var trainer in Model) // Loop through each trainer
+                    {
+                        <tr>
+                            <td><span class="fw-bold">@trainer.Name</span></td>
+                            <td><span>@trainer.Email</span></td>
+                            <td><span>@trainer.Phone</span></td>
+                            <td>
+                                <span class="badge bg-primary-color">@trainer.Specialties</span>
+                            </td>
+                            <td class="action position-relative text-end">
+                                @* Align dropdown container to the right *@
+                                <div class="dropdown">
+                                    <button class="btn btn-link p-0 border-0 text-decoration-none" type="button" @* Cleaner button style *@
+                                            id="dropdownMenuButton-@trainer.Id" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical fs-5 text-secondary"></i> @* Bootstrap icon for dropdown *@
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end" @* Align menu items to the right *@
+                                        aria-labelledby="dropdownMenuButton-@trainer.Id">
+                                        <li>
+                                            <a asp-controller="Trainer" asp-action="Details" asp-route-id="@trainer.Id"
+                                               class="dropdown-item d-flex align-items-center gap-2">
+                                                <i class="bi bi-eye text-info"></i> @* Changed icon color *@
+                                                <span>View Details</span>
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a asp-controller="Trainer" asp-action="Edit" asp-route-id="@trainer.Id"
+                                               class="dropdown-item d-flex align-items-center gap-2">
+                                                <i class="bi bi-pencil text-primary"></i> @* Changed icon color *@
+                                                <span>Edit Details</span>
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a asp-controller="Trainer" asp-action="Delete" asp-route-id="@trainer.Id"
+                                               class="dropdown-item d-flex align-items-center gap-2 text-danger">
+                                                <i class="bi bi-trash"></i>
+                                                <span>Delete</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else // Display this message if Model is empty or null
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-person-workspace display-1 text-muted"></i>
+            <h4 class="mt-3 text-muted">No Trainers Available</h4>
+            <p class="text-muted">Add your first trainer to get started</p>
+        </div>
+    }
+</div>
+
+@section Scripts
+{
+    <script>
+        // Script to fade out alerts after 3 seconds
+        document.addEventListener("DOMContentLoaded", function () {
+            // Select both potential alert IDs
+            const alertSuccess = document.getElementById("AlertSuccess");
+            const alertError = document.getElementById("AlertError");
+
+            function fadeOutAlert(alertBox) {
+                if (alertBox) {
+                    setTimeout(() => {
+                        // Use Bootstrap's built-in dismiss method if available
+                        var alertInstance = bootstrap.Alert.getOrCreateInstance(alertBox);
+                        if (alertInstance) {
+                            alertInstance.close();
+                        } else {
+                            // Fallback if Bootstrap JS isn't fully loaded
+                            alertBox.style.transition = "opacity 0.5s ease";
+                            alertBox.style.opacity = "0";
+                            setTimeout(() => alertBox.remove(), 500);
+                        }
+                    }, 3000); // 3 seconds delay
+                }
+            }
+
+            fadeOutAlert(alertSuccess);
+            fadeOutAlert(alertError);
+        });
+    </script>
+}

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementBLL.ViewModels.MemberViewModel
 {
-    internal class MemberToUpdateViewModel
+    public class MemberToUpdateViewModel
     {
         #region Name
         [Required(ErrorMessage = "Name is required.")]

@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 
 namespace GymManagementBLL.ViewModels.TrainerViewModels
 {
-    internal class TrainerToUpdateViewModel
+    public class TrainerToUpdateViewModel
     {
+        #region Id
+        [Required]
+        public int Id { get; set; }
+        #endregion
         #region Name
         [Required(ErrorMessage = "Name is required.")]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Name can contain only letters and spaces.")]
