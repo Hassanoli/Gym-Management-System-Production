@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementBLL.ViewModels.SessionViewModels
 {
-    internal class SessionViewModel
+    public class SessionViewModel
     {
         public int Id { get; set; }
         public string CategoryName { get; set; } = null!;
@@ -24,7 +24,12 @@ namespace GymManagementBLL.ViewModels.SessionViewModels
         public int AvailableSlots { get; set; }
 
         #region Computed Properties
-        public string DateDisplay => $"{StartDate:hh:mm tt} - {EndDate:hh:mm tt}";
+
+        // 1. خاصية لعرض التاريخ فقط
+        public string DateDisplay => StartDate.ToString("dd/MM/yyyy");
+
+        // 2. خاصية لعرض الوقت فقط
+        public string TimeRangeDisplay => $"{StartDate:hh:mm tt} - {EndDate:hh:mm tt}";
 
         public TimeSpan Duration => EndDate - StartDate;
 
@@ -33,7 +38,7 @@ namespace GymManagementBLL.ViewModels.SessionViewModels
             get
             {
                 if (StartDate > DateTime.Now)
-                    return "Upcomnig";
+                    return "Upcoming"; // <-- تم تصحيح الخطأ الإملائي هنا
                 else if (StartDate <= DateTime.Now && EndDate >= DateTime.Now)
                     return "Ongoing";
                 else
@@ -42,7 +47,5 @@ namespace GymManagementBLL.ViewModels.SessionViewModels
         }
 
         #endregion
-
-
     }
 }

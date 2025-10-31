@@ -1,0 +1,28 @@
+﻿<script>
+    // Script to fade out alerts after 3 seconds
+    document.addEventListener("DOMContentLoaded", function () {
+        // Select both potential alert IDs
+        const alertSuccess = document.getElementById("AlertSuccess");
+        const alertError = document.getElementById("AlertError");
+
+        function fadeOutAlert(alertBox) {
+            if (alertBox) {
+                setTimeout(() => {
+                    // Use Bootstrap's built-in dismiss method if available
+                    var alertInstance = bootstrap.Alert.getOrCreateInstance(alertBox);
+                    if (alertInstance) {
+                        alertInstance.close();
+                    } else {
+                        // Fallback if Bootstrap JS isn't fully loaded
+                        alertBox.style.transition = "opacity 0.5s ease";
+                        alertBox.style.opacity = "0";
+                        setTimeout(() => alertBox.remove(), 500);
+                    }
+                }, 3000); // 3 seconds delay
+            }
+        }
+
+        fadeOutAlert(alertSuccess);
+        fadeOutAlert(alertError);
+    });
+</script>

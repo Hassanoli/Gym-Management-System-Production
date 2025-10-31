@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementBLL.ViewModels.PlanViewModel
 {
-    internal class UpdatePlanViewModel
+    public class UpdatePlanViewModel
     {
         #region Plan Properties
 

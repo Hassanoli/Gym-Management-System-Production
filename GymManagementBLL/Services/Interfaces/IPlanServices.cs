@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementBLL.Services.Interfaces
 {
-    internal interface IPlanServices
+    public interface IPlanServices
     {
         IEnumerable<PlanViewModel> GetAllPlans();
         PlanViewModel? GetPlanDetails(int PlanId);
