@@ -1,7 +1,7 @@
-﻿using GymManagementBLL.Services.Interfaces; // Interface namespace
-using GymManagementBLL.ViewModels.TrainerViewModels; // ViewModels namespace
+﻿using GymManagementBLL.Services.Interfaces;
+using GymManagementBLL.ViewModels.TrainerViewModels; 
 using Microsoft.AspNetCore.Mvc;
-using System; // For DateTime if needed later
+using System;
 
 namespace GymManagementPL.Controllers
 {
@@ -24,7 +24,6 @@ namespace GymManagementPL.Controllers
         }
         #endregion
 
-    
         #region Create Trainer
         
         public IActionResult Create()

@@ -48,6 +48,8 @@ namespace GymManagementPL
             builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
             builder.Services.AddScoped<IMemberServices, MemberService>();
             builder.Services.AddScoped<ITrainerServices, TrainerService>();
+            builder.Services.AddScoped<IPlanServices, PlanService>();
+            builder.Services.AddScoped<ISessionService, SessionService>();
 
 
             #endregion

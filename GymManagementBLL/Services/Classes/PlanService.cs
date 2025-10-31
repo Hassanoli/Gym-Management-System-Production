@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace GymManagementBLL.Services.Classes
 {
-    internal class PlanService : IPlanServices
+    public class PlanService : IPlanServices
     {
         private readonly IUintOfWork _uintOfWork;
         private readonly IMapper _mapper;
