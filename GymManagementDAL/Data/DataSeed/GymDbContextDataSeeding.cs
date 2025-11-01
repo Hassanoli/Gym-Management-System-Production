@@ -11,6 +11,7 @@ namespace GymManagementDAL.Data.DataSeed
 {
     public static class GymDbContextDataSeeding
     {
+        #region Public Method : SeedData
         public static bool SeedData(GymDbContext dbcontext)
         {
             try
@@ -35,27 +36,30 @@ namespace GymManagementDAL.Data.DataSeed
                 return dbcontext.SaveChanges() > 0;
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"Seesing Failed {ex}");
                 return false;
             }
         }
+        #endregion
 
+        #region Private Method : LoadDataFromJsonFile
         private static List<T> LoadDataFromJsonFile<T>(string fileName)
         {
             //D:\Projects\Route\GymManagementSystemSolution\GymManagementPL\wwwroot\Files\plans.json
             //D:\Projects\Route\GymManagementSystemSolution\GymManagementPL\wwwroot\Files\categories.json
             var FilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Files", fileName);
-            
+
             if (!File.Exists(FilePath)) throw new FileNotFoundException();
-            
+
             string Data = File.ReadAllText(FilePath);
             var Options = new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true,
             };
-            return JsonSerializer.Deserialize<List<T>>(Data , Options) ?? new List<T>();
+            return JsonSerializer.Deserialize<List<T>>(Data, Options) ?? new List<T>();
         }
+        #endregion
     }
 }

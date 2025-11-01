@@ -1,10 +1,12 @@
 ﻿using GymManagementBLL.Services.Interfaces;
 using GymManagementDAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IO; // Required for Path and Directory
 
 namespace GymManagementPL.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IAnalyticsService _analyticsService;

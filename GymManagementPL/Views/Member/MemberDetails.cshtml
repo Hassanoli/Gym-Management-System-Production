@@ -1,4 +1,7 @@
 ﻿@model MemberViewModel
+@{
+    ViewData["Title"] = "Mmeber Details";
+}
 
 <div class="container">
     <main role="main" class="pb-3">
@@ -9,7 +12,7 @@
                 <div class="col-md-6">
                     <div class="card card-details border-0 p-2 shadow">
                         <div class="text-center mt-3">
-                            <img src="~/images/@Model.Photo" alt="MemberPhoto" class="rounded-circle"
+                            <img src="~/images/Members/@Model.Photo" alt="MemberPhoto" class="rounded-circle"
                                  style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #fff; margin-top: -60px;" />
                         </div>
                         <div class="card-body text-center">

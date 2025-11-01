@@ -1,4 +1,9 @@
 ﻿@model IEnumerable<MemberViewModel> //Member View
+
+    @{
+    ViewData["Title"] = "All Members";
+    }
+
 @if (TempData["SuccessMessage"] is not null)
 {
 
@@ -53,7 +58,7 @@
                                                 }
                                                 else
                                                 {
-                                        <img src="~/images/@member.Photo" alt="Default Avatar" class="rounded-circle"
+                                        <img src="~/images/Members/@member.Photo" alt="Default Avatar" class="rounded-circle"
                                              style="width: 40px; height: 40px;" />
 
                                                 }

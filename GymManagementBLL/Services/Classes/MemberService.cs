@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GymManagementBLL.Services.Attachment_Service;
 using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels.MemberViewModel;
 using GymManagementDAL.Entities;
@@ -14,11 +15,12 @@ namespace GymManagementBLL.Services.Classes
         #region Fields & Constructor
         private readonly IUintOfWork _uintOfWork;
         private readonly IMapper _mapper;
-
-        public MemberService(IUintOfWork uintOfWork, IMapper mapper)
+        private readonly IAttachment_Service _attachment_Service;
+        public MemberService(IUintOfWork uintOfWork, IMapper mapper , IAttachment_Service attachment_Service)
         {
             _uintOfWork = uintOfWork;
             _mapper = mapper;
+            _attachment_Service = attachment_Service;
         }
         #endregion
 
@@ -40,10 +42,23 @@ namespace GymManagementBLL.Services.Classes
             {
                 if (IsEmailExists(createMember.Email) || IsPhoneExists(createMember.Phone))
                     return false;
+
+                var PhotoName = _attachment_Service.Upload("Members" , createMember.PhotoFile);
+
+                if (string.IsNullOrEmpty(PhotoName))
+                    return false; 
+
                 var member = _mapper.Map<Member>(createMember);
+                member.Photo = PhotoName;
 
                 _uintOfWork.GetRepository<Member>().Add(member);
-                return _uintOfWork.SaveChanges() > 0;
+                var IsCreated =  _uintOfWork.SaveChanges() > 0;
+
+                if(!IsCreated)
+                {
+                    _attachment_Service.Delete(PhotoName , "Members");
+                }
+                return IsCreated;
             }
             catch (Exception ex)
             {
@@ -129,20 +144,31 @@ namespace GymManagementBLL.Services.Classes
             }
         }
         #endregion
- 
+
         #region Remove Member
         public bool RemoveMember(int MemberId)
         {
             try
             {
-             
                 if (HasActiveSessions(MemberId))
                     return false;
-             
-                var memberRepo = _uintOfWork.GetRepository<Member>();
-                memberRepo.Delete(MemberId);
 
-                return _uintOfWork.SaveChanges() > 0;
+                var memberRepo = _uintOfWork.GetRepository<Member>();
+                var member = memberRepo.GetById(MemberId);
+
+                if (member == null)
+                    return false;
+
+                memberRepo.Delete(MemberId);
+                var isDeleted = _uintOfWork.SaveChanges() > 0;
+
+                if (isDeleted)
+                {
+                    _attachment_Service.Delete(member.Photo, "Members");
+                    return isDeleted;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {
@@ -151,9 +177,10 @@ namespace GymManagementBLL.Services.Classes
                 {
                     Console.WriteLine($"--- INNER EX: {ex.InnerException.Message} ---");
                 }
-                return false; 
+                return false;
             }
         }
+
         #endregion
 
         #region Helper Methods
