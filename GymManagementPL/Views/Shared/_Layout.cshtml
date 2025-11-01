@@ -1,6 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var CuurentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
+<!DOCTYPE html>
 <html lang="en">
-<head>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,9 +17,8 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
         <!-- ^ Our main css file -->
         <link rel="stylesheet" href="~/css/style.css" />
-        <title>Power fitness | Home</title>
+        <title>Power fitness | @ViewData["Title"]</title>
     </head>
-</head>
 <body>
     <header>
         <!-- ^ navbar -->
@@ -35,20 +37,23 @@
                     <ul class="navbar-nav m-auto mb-2 mb-lg-0 mt-3 mt-lg-0">
                         <li class="nav-item">
                         <li class="nav-item">
-                            <a class="nav-link active px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page"
-                               asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5 @(CuurentController == "Home" ? "active" : "") aria-current="page" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" asp-controller="Member" asp-action="Index">Members</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" asp-controller="Trainer" asp-action="Index">Trainers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" asp-controller="Sessions" asp-action="Index">Sessions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" asp-controller="Plan" asp-action="Index">Plans</a>
+
+                        @if(User.IsInRole("SuperAdmin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5 @(CuurentController == "Member" ? "active" : "") aria-current="page" asp-controller="Member" asp-action="Index">Members</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5 @(CuurentController == "Trainer" ? "active" : "") aria-current="page" asp-controller="Trainer" asp-action="Index">Trainers</a>
+                            </li>
+                        }
+                        <li class="nav-item">                              
+                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5 @(CuurentController == "Sessions" ? "active" : "") aria-current="page" asp-controller="Sessions" asp-action="Index">Sessions</a>
+                        </li>                                            
+                        <li class="nav-item">                             
+                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5 @(CuurentController == "Plan" ? "active" : "") aria-current="page" asp-controller="Plan" asp-action="Index">Plans</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page"
@@ -59,6 +64,14 @@
                                 Sessions
                                 Schedule
                             </a>
+                        </li>
+                        <li class="nav-item">
+                            <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
+                                <button type="submit"
+                                        class="btn btn-link nav-link px-3 py-2 mx-2 fw-bolder fs-5 text-black-alternative">
+                                    Logout
+                                </button>
+                            </form>
                         </li>
                     </ul>
                 </div>

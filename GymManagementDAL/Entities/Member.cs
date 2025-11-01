@@ -8,8 +8,7 @@ namespace GymManagementDAL.Entities
 {
     public class Member:GymUser
     {
-        public string? Photo { get; set; }
-        //public DateTime JoinDate { get; set; } = DateTime.Now; // عمود إضافي منفصل
+        public string Photo { get; set;} = null !;
 
         #region Relationships
         public HealthRecord HealthRecord { get; set; } = null!;

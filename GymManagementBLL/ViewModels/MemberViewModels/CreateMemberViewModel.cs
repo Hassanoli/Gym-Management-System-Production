@@ -1,4 +1,5 @@
 ﻿using GymManagementDAL.Entities.ENUMS;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -33,13 +34,16 @@ namespace GymManagementBLL.ViewModels.MemberViewModel
         #endregion
 
         #region Photo
-        [Url(ErrorMessage = "Photo must be a valid URL.")]
-        [StringLength(255, ErrorMessage = "Photo URL must not exceed 255 characters.")]
-        public string? Photo { get; set; }
+        //[Url(ErrorMessage = "Photo must be a valid URL.")]
+        //[StringLength(255, ErrorMessage = "Photo URL must not exceed 255 characters.")]
+        //public string? Photo { get; set; }
+        [Required(ErrorMessage = "Photo is required.")]
+        [Display(Name = "Profile Photo")]
+        public IFormFile PhotoFile { get; set; } = null!;
         #endregion
 
         #region Address
-      
+
         #endregion
 
         #region Date Of Birth
