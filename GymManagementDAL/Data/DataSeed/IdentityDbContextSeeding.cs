@@ -1,43 +1,44 @@
 ﻿using GymManagementDAL.Entities;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagementDAL.Data.DataSeed
 {
     public static class IdentityDbContextSeeding
     {
-        public static bool SeedData(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        #region Public Methods
+
+        public static bool SeedData(
+            RoleManager<IdentityRole> roleManager,
+            UserManager<ApplicationUser> userManager)
         {
             try
             {
                 var HasUsers = userManager.Users.Any();
                 var HasRoles = userManager.Users.Any();
 
-                if (HasUsers && HasRoles) return false;
+                if (HasUsers && HasRoles)
+                    return false;
 
-                if(!HasRoles)
+                if (!HasRoles)
                 {
-                    var Roles = new List<IdentityRole>()
+                    var Roles = new List<IdentityRole>
                     {
-                        new() {Name = "SuperAdmin"},
-                        new() {Name = "Admin"}
+                        new() { Name = "SuperAdmin" },
+                        new() { Name = "Admin" }
                     };
-                    foreach (var Role in Roles)
+
+                    foreach (var role in Roles)
                     {
-                        if (!roleManager.RoleExistsAsync(Role.Name!).Result)
+                        if (!roleManager.RoleExistsAsync(role.Name!).Result)
                         {
-                            roleManager.CreateAsync(Role).Wait();
+                            roleManager.CreateAsync(role).Wait();
                         }
                     }
                 }
 
-                if(!HasUsers)
+                if (!HasUsers)
                 {
-                    var MainAdmin = new ApplicationUser()
+                    var MainAdmin = new ApplicationUser
                     {
                         FirstName = "Alhassan",
                         LastName = "Mohamed",
@@ -45,10 +46,11 @@ namespace GymManagementDAL.Data.DataSeed
                         Email = "hassanmohamedali0113@gmail.com",
                         PhoneNumber = "01550122173",
                     };
+
                     userManager.CreateAsync(MainAdmin, "P@ssw0rd").Wait();
                     userManager.AddToRoleAsync(MainAdmin, "SuperAdmin").Wait();
 
-                    var Admin = new ApplicationUser()
+                    var Admin = new ApplicationUser
                     {
                         FirstName = "ahmed",
                         LastName = "rahmo",
@@ -56,21 +58,20 @@ namespace GymManagementDAL.Data.DataSeed
                         Email = "ahmedrahmo@gmail.com",
                         PhoneNumber = "01126989009",
                     };
+
                     userManager.CreateAsync(Admin, "P@ssw0rd").Wait();
                     userManager.AddToRoleAsync(Admin, "Admin").Wait();
-
-
-
                 }
 
                 return true;
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Identity Seeding Failed: {ex.Message}");
-                return false; 
+                return false;
             }
         }
+
+        #endregion
     }
 }

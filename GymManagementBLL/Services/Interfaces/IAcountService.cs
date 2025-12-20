@@ -11,6 +11,8 @@ namespace GymManagementBLL.Services.Interfaces
 {
     public interface IAcountService
     {
+        #region Validate User
         ApplicationUser? ValidadteUser(AccountViewModel accountViewModel);
+        #endregion
     }
 }

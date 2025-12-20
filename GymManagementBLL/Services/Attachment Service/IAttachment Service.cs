@@ -9,8 +9,12 @@ namespace GymManagementBLL.Services.Attachment_Service
 {
     public interface IAttachment_Service
     {
-        string? Upload(string FolderName, IFormFile File);  
+        #region Upload
+        string? Upload(string FolderName, IFormFile File);
+        #endregion
 
+        #region Delete
         bool Delete(string FileName, string FolderName);
+        #endregion
     }
 }

@@ -2,39 +2,51 @@
 using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagementDAL.Repositories.Classes
 {
-    public class SessionRepository : GenericRepository<Session>, ISessionRepository
+    public class SessionRepository
+        : GenericRepository<Session>, ISessionRepository
     {
+        #region Fields
+
         private readonly GymDbContext _dbContext;
+
+        #endregion
+
+        #region Constructor
 
         public SessionRepository(GymDbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
+
+        #endregion
+
+        #region Public Methods
+
         public IEnumerable<Session> GetAllSessionsWithTrainersAndCateogries()
         {
-           return _dbContext.Sessions.Include(X => X.SessionTrainer)
-                                     .Include(X => X.SessionCategory)
-                                     .ToList();
+            return _dbContext.Sessions
+                             .Include(x => x.SessionTrainer)
+                             .Include(x => x.SessionCategory)
+                             .ToList();
         }
 
         public Session? GetAllSessionByIdWithTrainersAndCateogries(int id)
         {
-           return _dbContext.Sessions.Include(X => X.SessionTrainer)
-                                     .Include(X => X.SessionCategory)
-                                     .FirstOrDefault(X => X.Id == id);
+            return _dbContext.Sessions
+                             .Include(x => x.SessionTrainer)
+                             .Include(x => x.SessionCategory)
+                             .FirstOrDefault(x => x.Id == id);
         }
 
         public int GetCountOfBookedSlots(int sessionId)
         {
-            return _dbContext.MemberSessions.Count(X => X.SessionId == sessionId);
+            return _dbContext.MemberSessions
+                             .Count(x => x.SessionId == sessionId);
         }
+
+        #endregion
     }
 }

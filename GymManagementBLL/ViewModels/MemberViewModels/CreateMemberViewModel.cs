@@ -34,16 +34,9 @@ namespace GymManagementBLL.ViewModels.MemberViewModel
         #endregion
 
         #region Photo
-        //[Url(ErrorMessage = "Photo must be a valid URL.")]
-        //[StringLength(255, ErrorMessage = "Photo URL must not exceed 255 characters.")]
-        //public string? Photo { get; set; }
         [Required(ErrorMessage = "Photo is required.")]
         [Display(Name = "Profile Photo")]
         public IFormFile PhotoFile { get; set; } = null!;
-        #endregion
-
-        #region Address
-
         #endregion
 
         #region Date Of Birth
@@ -52,7 +45,7 @@ namespace GymManagementBLL.ViewModels.MemberViewModel
         public DateOnly DateOfBirth { get; set; }
         #endregion
 
-        #region Gender 
+        #region Gender
         [Required(ErrorMessage = "Gender is required.")]
         public Gender Gender { get; set; }
         #endregion
@@ -73,11 +66,9 @@ namespace GymManagementBLL.ViewModels.MemberViewModel
         public string City { get; set; } = null!;
         #endregion
 
-        #region HelathRecordViewModel 
+        #region Health Record
         [Required(ErrorMessage = "HealthRecordViewModel Is Required")]
         public HealthRecordViewModel HealthRecordViewModel { get; set; } = null!;
         #endregion
-        
-
     }
 }

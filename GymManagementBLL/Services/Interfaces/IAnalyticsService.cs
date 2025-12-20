@@ -9,6 +9,8 @@ namespace GymManagementBLL.Services.Interfaces
 {
     public interface IAnalyticsService
     {
+        #region Get Analytics Data
         AnalyticsViewModel GetAnalyticsData();
+        #endregion
     }
 }

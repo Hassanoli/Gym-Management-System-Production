@@ -11,7 +11,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 }
-else if (TempData["ErrorMessage"] != null)
+
+@if (TempData["ErrorMessage"] != null)
 {
     <div id="Alert" class="alert alert-danger alert-dismissible fade show">
         <i class="bi bi-exclamation-triangle-fill me-2"></i>
@@ -39,6 +40,7 @@ else if (TempData["ErrorMessage"] != null)
             {
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="card h-100 shadow-sm border-0 session-card">
+
                         <div class="card-header text-white py-3 @(session.Status == "Ongoing" ? "bg-success" : session.Status == "Upcoming" ? "bg-primary" : "bg-secondary")">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">
@@ -56,21 +58,25 @@ else if (TempData["ErrorMessage"] != null)
                                     <i class="bi bi-person-circle text-primary-color me-2"></i>
                                     <strong>Trainer:</strong> @session.TrainerName
                                 </div>
+
                                 <div class="info-item mb-2">
                                     <i class="bi bi-calendar3 text-primary-color me-2"></i>
                                     <strong>Date:</strong> @session.DateDisplay
                                 </div>
+
                                 <div class="info-item mb-2">
                                     <i class="bi bi-clock text-primary-color me-2"></i>
                                     <strong>Time:</strong> @session.TimeRangeDisplay
                                 </div>
+
                                 <div class="info-item mb-2">
                                     <i class="bi bi-hourglass-split text-primary-color me-2"></i>
                                     <strong>Duration:</strong> @session.Duration
                                 </div>
+
                                 <div class="info-item">
                                     <i class="bi bi-people text-primary-color me-2"></i>
-                                    <strong>Capacity:</strong> @session.AvailableSlots/@session.Capacity slots
+                                    <strong>Capacity:</strong> @session.AvailableSlots / @session.Capacity slots
                                 </div>
                             </div>
                         </div>
@@ -80,16 +86,19 @@ else if (TempData["ErrorMessage"] != null)
                                 <a asp-action="Details" asp-route-id="@session.Id" class="btn btn-outline btn-sm">
                                     <i class="bi bi-eye me-1"></i>View Details
                                 </a>
+
                                 <div class="d-flex gap-2">
                                     <a asp-action="Edit" asp-route-id="@session.Id" class="btn btn-outline btn-sm flex-fill">
                                         <i class="bi bi-pencil me-1"></i>Edit
                                     </a>
+
                                     <a asp-action="Delete" asp-route-id="@session.Id" class="btn btn-outline text-danger btn-sm flex-fill">
                                         <i class="bi bi-trash me-1"></i>Delete
                                     </a>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             }

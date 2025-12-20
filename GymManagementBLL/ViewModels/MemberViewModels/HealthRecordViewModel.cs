@@ -19,14 +19,14 @@ namespace GymManagementBLL.ViewModels.MemberViewModel
 
         #region Blood Type
         [Required(ErrorMessage = "Blood type is required.")]
-        [StringLength(3, MinimumLength = 1, ErrorMessage = "Blood type must be 1 to 3 characters (e.g., A+, B-, O+).")]
+        [StringLength(3, MinimumLength = 1, ErrorMessage = "Blood type must be 1 to 3 characters.")]
         [RegularExpression(@"^(A|B|AB|O)[+-]?$", ErrorMessage = "Blood type must be valid (e.g., A+, O-, AB).")]
         public string BloodType { get; set; } = null!;
         #endregion
 
         #region Note
         [StringLength(250, ErrorMessage = "Note cannot exceed 250 characters.")]
-        public string? Note { get; set; } 
+        public string? Note { get; set; }
         #endregion
     }
 }

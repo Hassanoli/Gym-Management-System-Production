@@ -1,17 +1,13 @@
 ﻿using GymManagementDAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagementDAL.Data.Configurations
 {
-    internal class MemberConfiguration : GymUserConfigurations<Member>, IEntityTypeConfiguration<Member>
-
+    internal class MemberConfiguration
+        : GymUserConfigurations<Member>, IEntityTypeConfiguration<Member>
     {
+        #region Configuration
         public new void Configure(EntityTypeBuilder<Member> builder)
         {
             builder.Property(X => X.CreatedAt)
@@ -20,5 +16,6 @@ namespace GymManagementDAL.Data.Configurations
 
             base.Configure(builder);
         }
+        #endregion
     }
 }

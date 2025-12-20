@@ -56,13 +56,19 @@
                             <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5 @(CuurentController == "Plan" ? "active" : "") aria-current="page" asp-controller="Plan" asp-action="Index">Plans</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page"
-                               href="#">Memberships</a>
+                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 @(CuurentController == "Membership" ? "active" : "")"
+                               aria-current="page"
+                               asp-controller="Membership"
+                               asp-action="Index">
+                                Memberships
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">
-                                Sessions
-                                Schedule
+                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 @(CuurentController == "Bookiing" ? "active" : "")"
+                               aria-current="page"
+                               asp-controller="Booking"
+                               asp-action="Index">
+                                Sessions Schedule
                             </a>
                         </li>
                         <li class="nav-item">

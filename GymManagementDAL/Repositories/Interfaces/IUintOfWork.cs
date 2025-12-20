@@ -1,19 +1,28 @@
 ﻿using GymManagementDAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Formats.Tar;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagementDAL.Repositories.Interfaces
 {
     public interface IUintOfWork
     {
-        public ISessionRepository sessionRepository { get; }
-        IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntitiy, new();
+        #region Repositories
+
+        ISessionRepository sessionRepository { get; }
+        IMembershibRepository membershibRepository { get; }
+        IBookingRepository bookingRepository { get; }
+
+        #endregion
+
+        #region Generic Repository Resolver
+
+        IGenericRepository<TEntity> GetRepository<TEntity>()
+            where TEntity : BaseEntitiy, new();
+
+        #endregion
+
+        #region Save Changes
 
         int SaveChanges();
 
+        #endregion
     }
 }
