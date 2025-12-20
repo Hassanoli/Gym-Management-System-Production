@@ -1,19 +1,20 @@
 ﻿using GymManagementDAL.Entities.ENUMS;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entities
 {
     public class Trainer : GymUser
     {
-        // HireDate == CreatedAt Of BaseEntity
+        #region Properties
 
+        // HireDate = CreatedAt
         public Specialties Specialties { get; set; }
 
+        #endregion
+
+        #region Relationships
+
         public ICollection<Session> TrainerSession { get; set; } = null!;
-        
+
+        #endregion
     }
 }

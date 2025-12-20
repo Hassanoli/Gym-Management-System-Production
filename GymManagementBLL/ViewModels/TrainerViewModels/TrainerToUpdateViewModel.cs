@@ -14,6 +14,7 @@ namespace GymManagementBLL.ViewModels.TrainerViewModels
         [Required]
         public int Id { get; set; }
         #endregion
+
         #region Name
         [Required(ErrorMessage = "Name is required.")]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Name can contain only letters and spaces.")]
@@ -33,7 +34,7 @@ namespace GymManagementBLL.ViewModels.TrainerViewModels
         public string Phone { get; set; } = null!;
         #endregion
 
-        #region DateOfBirth
+        #region Date Of Birth
         [Required(ErrorMessage = "Date of birth is required.")]
         [DataType(DataType.Date)]
         public DateOnly DateOfBirth { get; set; }
@@ -44,32 +45,25 @@ namespace GymManagementBLL.ViewModels.TrainerViewModels
         public Gender Gender { get; set; }
         #endregion
 
-        #region BuildingNumber
+        #region Address
         [Required(ErrorMessage = "Building number is required.")]
         [Range(1, 10000, ErrorMessage = "Building number must be between 1 and 10000.")]
         public int BuildingNumber { get; set; }
-        #endregion
 
-        #region City
         [Required(ErrorMessage = "City is required.")]
         [StringLength(30, MinimumLength = 2, ErrorMessage = "City name must be between 2 and 30 characters.")]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "City can contain only letters and spaces.")]
         public string City { get; set; } = null!;
-        #endregion
 
-        #region Street
         [Required(ErrorMessage = "Street is required.")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Street name must be between 2 and 50 characters.")]
         [RegularExpression(@"^[a-zA-Z0-9\s\.\-]+$", ErrorMessage = "Street can contain only letters, numbers, spaces, hyphens, or periods.")]
         public string Street { get; set; } = null!;
         #endregion
 
-
         #region Specialties
         [Required(ErrorMessage = "Specialty is required.")]
         public Specialties Specialties { get; set; }
         #endregion
-
-
     }
 }

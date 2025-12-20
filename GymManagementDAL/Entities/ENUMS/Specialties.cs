@@ -8,10 +8,13 @@ namespace GymManagementDAL.Entities.ENUMS
 {
     public enum Specialties
     {
-        GenralFitnees = 1 , 
-        Yoga , 
-        Boxing , 
+        #region Values
+
+        GenralFitnees = 1,
+        Yoga,
+        Boxing,
         CrossFit
-        
+
+        #endregion
     }
 }

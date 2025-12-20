@@ -17,119 +17,130 @@ namespace GymManagementPL
         public static void Main(string[] args)
         {
             #region 🔧 Builder Configuration
+
             var builder = WebApplication.CreateBuilder(args);
+
             #endregion
 
             #region 🧩 Services Registration
 
-            // Add services to the container.
+            // MVC
             builder.Services.AddControllersWithViews();
+
+            // DbContext
             builder.Services.AddDbContext<GymDbContext>(options =>
             {
-                //options.UseSqlServer("Server=.;Database=GymManagementDB;Trusted_Connection=True;TrustServerCertificate=True;");
-
-                //options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["DefaultConnection"]);
-
-                //options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
-
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection")
+                );
             });
 
-            /*********************************
-            //builder.Services.AddScoped<GenericRepository<Member>, GenericRepository<Member>>();
-            //builder.Services.AddScoped<GenericRepository<Trainer>, GenericRepository<Trainer>>();
-            //builder.Services.AddScoped<GenericRepository<Plan>, GenericRepository<Plan>>();
-            *********************************************/
+            #region Repositories & Unit Of Work
 
-            //builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            //builder.Services.AddScoped<IPlanRepository, PlanRepository>();
             builder.Services.AddScoped<IUintOfWork, UintOfWork>();
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
-            builder.Services.AddAutoMapper(X => X.AddProfile(new MappingProfiles()));
+            builder.Services.AddScoped<IMembershibRepository, MembershibRepository>();
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+
+            #endregion
+
+            #region AutoMapper
+
+            builder.Services.AddAutoMapper(x =>
+                x.AddProfile(new MappingProfiles()));
+
+            #endregion
+
+            #region BLL Services
+
             builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
             builder.Services.AddScoped<IMemberServices, MemberService>();
             builder.Services.AddScoped<ITrainerServices, TrainerService>();
+            builder.Services.AddScoped<IMembershipService, MembershipService>();
+            builder.Services.AddScoped<IBookingService, BookingService>();
             builder.Services.AddScoped<IPlanServices, PlanService>();
             builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddScoped<IAttachment_Service, Attachment_Service>();
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(Config =>
+            builder.Services.AddScoped<IAcountService, AcountService>();
+
+            #endregion
+
+            #region Identity Configuration
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(config =>
             {
-                //Config.Password.RequiredLength = 6 ;
-                //Config.Password.RequireLowercase = true;
-                //Config.Password.RequireUppercase = true;
-                Config.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<GymDbContext>();
+                config.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<GymDbContext>();
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Account/Login";
                 options.AccessDeniedPath = "/Account/AccessDenied";
-
             });
 
+            // Identity Core (as-is)
             builder.Services.AddIdentityCore<ApplicationUser>()
                 .AddEntityFrameworkStores<GymDbContext>();
 
-            #region Login
-            builder.Services.AddScoped<IAcountService, AcountService>();
             #endregion
-
-
 
             #endregion
 
-            #region 🚀 App Build
+            #region 🚀 Build Application
+
             var app = builder.Build();
 
-            #region Seed Data -Migrate Database
-            using var Scoped = app.Services.CreateScope();
-            var dbContext = Scoped.ServiceProvider.GetRequiredService<GymDbContext>();
-            var roleManger = Scoped.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var UserManger = Scoped.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var PendingMigartions = dbContext.Database.GetPendingMigrations();
-            if (PendingMigartions?.Any() ?? false)
-                dbContext.Database.Migrate();
-            GymDbContextDataSeeding.SeedData(dbContext);
-            IdentityDbContextSeeding.SeedData(roleManger, UserManger);
-
             #endregion
+
+            #region 🌱 Database Migration & Data Seeding
+
+            using var scope = app.Services.CreateScope();
+
+            var dbContext = scope.ServiceProvider.GetRequiredService<GymDbContext>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            var pendingMigrations = dbContext.Database.GetPendingMigrations();
+            if (pendingMigrations?.Any() ?? false)
+                dbContext.Database.Migrate();
+
+            GymDbContextDataSeeding.SeedData(dbContext);
+            IdentityDbContextSeeding.SeedData(roleManager, userManager);
+
             #endregion
 
             #region ⚙️ Middleware Configuration
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
             app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
             #endregion
 
             #region 🗺️ Endpoint Mapping
-            //app.MapStaticAssets();
-            //app.MapControllerRoute(
-            //    name: "Trainers",
-            //    pattern: "coach/{action}",
-            //    defaults: new { controller = "Trainer"  , action = "Index"})
-            //    .WithStaticAssets();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Account}/{action=Login}/{id?}")
                 .WithStaticAssets();
+
             #endregion
 
             #region ▶️ Run Application
-            app.UseStaticFiles();
+
             app.Run();
+
             #endregion
         }
     }

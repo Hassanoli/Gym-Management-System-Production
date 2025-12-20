@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GymManagementDAL.Entities
+﻿namespace GymManagementDAL.Entities
 {
     public class MemberShip : BaseEntitiy
     {
-        //StartDate == CreatedAt Of BaseEntity
+        #region Properties
+
+        // StartDate = CreatedAt
         public DateTime EndDate { get; set; }
 
-        // Read Only Property
         public string Status
         {
             get
@@ -23,11 +18,19 @@ namespace GymManagementDAL.Entities
             }
         }
 
+        #endregion
+
+        #region Relationships
+
         public int MemberId { get; set; }
         public Member Member { get; set; } = null!;
 
-        public int PlanId { get; set; }
-
+        public int PlanId
+        {
+            get; set;
+        }
         public Plan Plan { get; set; } = null!;
+
+        #endregion
     }
 }

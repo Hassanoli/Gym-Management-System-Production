@@ -1,13 +1,17 @@
 ﻿@{
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    #region Head
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Access Denied - Fitness Gym</title>
+
     <style>
+        /* ================= Global Reset ================= */
         * {
             margin: 0;
             padding: 0;
@@ -20,48 +24,7 @@
             color: #333;
         }
 
-        /* Navigation Bar */
-        .navbar {
-            background-color: #ffffff;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 40px;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #0033cc;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            list-style: none;
-        }
-
-            .nav-links a {
-                text-decoration: none;
-                color: #333;
-                font-weight: 500;
-                transition: color 0.3s;
-            }
-
-                .nav-links a:hover {
-                    color: #0033cc;
-                }
-
-            .nav-links .active {
-                color: #0033cc;
-            }
-
-        /* Main Container */
+        /* ================= Layout ================= */
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -79,7 +42,7 @@
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
         }
 
-        /* Left Content */
+        /* ================= Content ================= */
         .content {
             display: flex;
             flex-direction: column;
@@ -93,9 +56,7 @@
 
         h1 {
             font-size: 48px;
-            color: #222;
             font-weight: bold;
-            line-height: 1.2;
         }
 
         .error-highlight {
@@ -105,7 +66,6 @@
         .error-message {
             font-size: 16px;
             color: #666;
-            line-height: 1.6;
         }
 
         .error-code {
@@ -113,29 +73,19 @@
             padding: 12px 16px;
             border-radius: 6px;
             font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: #333;
-            margin: 10px 0;
         }
 
-        /* Buttons */
+        /* ================= Buttons ================= */
         .button-group {
-            display: flex;
-            gap: 15px;
             margin-top: 20px;
         }
 
         .btn {
             padding: 12px 28px;
-            border: none;
             border-radius: 6px;
-            font-size: 16px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
             text-decoration: none;
             display: inline-block;
-            text-align: center;
         }
 
         .btn-primary {
@@ -143,23 +93,7 @@
             color: white;
         }
 
-            .btn-primary:hover {
-                background-color: #0028a3;
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(0, 51, 204, 0.3);
-            }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: #0033cc;
-            border: 2px solid #0033cc;
-        }
-
-            .btn-secondary:hover {
-                background-color: #f0f4ff;
-            }
-
-        /* Right Image */
+        /* ================= Image ================= */
         .image-section {
             display: flex;
             justify-content: center;
@@ -168,55 +102,42 @@
 
         .lock-icon {
             font-size: 120px;
-            opacity: 0.8;
-        }
-
-
-        .nav-links {
-            gap: 15px;
-            font-size: 14px;
-        }
-
-        h1 {
-            font-size: 36px;
-        }
-
-        .button-group {
-            flex-direction: column;
-        }
-
-        .btn {
-            width: 100%;
-        }
-
-        .lock-icon {
-            font-size: 80px;
-        }
-
         }
     </style>
+    #endregion
 </head>
+
 <body>
-    <!-- Main Content -->
+    #region Body
     <div class="container">
         <div class="access-denied-wrapper">
+
             <!-- Left Content -->
             <div class="content">
                 <div class="error-icon">🚫</div>
+
                 <h1>
                     Access <span class="error-highlight">Denied</span>
                 </h1>
+
                 <p class="error-message">
-                    We're sorry, but you don't have permission to access this resource. Your current user role or membership status doesn't grant you access to this section.
+                    We're sorry, but you don't have permission to access this resource.
                 </p>
+
                 <div class="error-code">
                     Error Code: 403 - Forbidden Access
                 </div>
+
                 <p class="error-message">
-                    If you believe this is an error or need elevated permissions, please contact the system administrator or your membership manager for assistance.
+                    Please contact the system administrator if you believe this is an error.
                 </p>
+
                 <div class="button-group">
-                    <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Return to Home</a>
+                    <a asp-action="Index"
+                       asp-controller="Home"
+                       class="btn btn-primary">
+                        Return to Home
+                    </a>
                 </div>
             </div>
 
@@ -224,7 +145,9 @@
             <div class="image-section">
                 <div class="lock-icon">🔒</div>
             </div>
+
         </div>
     </div>
+    #endregion
 </body>
 </html>

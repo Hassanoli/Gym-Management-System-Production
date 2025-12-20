@@ -8,8 +8,11 @@ namespace GymManagementBLL.ViewModels.SessionViewModels
 {
     public class TrainerSelectViewModel
     {
+        #region Properties
+
         public int Id { get; set; }
         public string Name { get; set; } = null!;
 
+        #endregion
     }
 }

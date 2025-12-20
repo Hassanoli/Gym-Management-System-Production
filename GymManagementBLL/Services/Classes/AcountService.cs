@@ -12,14 +12,18 @@ namespace GymManagementBLL.Services.Classes
 {
     public class AcountService : IAcountService
     {
+        #region Fields
         private readonly UserManager<ApplicationUser> _userManager;
+        #endregion
 
+        #region Constructor
         public AcountService(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
+        #endregion
 
-
+        #region Validate User
         public ApplicationUser? ValidadteUser(AccountViewModel accountViewModel)
         {
             var user = _userManager.FindByEmailAsync(accountViewModel.Email).Result;
@@ -28,8 +32,11 @@ namespace GymManagementBLL.Services.Classes
             {
                 return null;
             }
+
             var IsPasswordValid = _userManager.CheckPasswordAsync(user, accountViewModel.Password).Result;
+
             return IsPasswordValid ? user : null;
         }
+        #endregion
     }
 }

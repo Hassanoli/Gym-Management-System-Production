@@ -9,6 +9,8 @@ namespace GymManagementBLL.ViewModels.SessionViewModels
 {
     public class UpdateSessionViewModel
     {
+        #region Properties
+
         [Required(ErrorMessage = "Description is required")]
         [StringLength(500, MinimumLength = 10, ErrorMessage = "Description must be between 10 and 500 characters")]
         public string Description { get; set; } = null!;
@@ -25,5 +27,6 @@ namespace GymManagementBLL.ViewModels.SessionViewModels
         [Display(Name = "Trainer")]
         public int TrainerId { get; set; }
 
+        #endregion
     }
 }

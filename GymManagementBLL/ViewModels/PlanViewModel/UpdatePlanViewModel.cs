@@ -28,7 +28,5 @@ namespace GymManagementBLL.ViewModels.PlanViewModel
         public decimal Price { get; set; }
 
         #endregion
- 
-
     }
 }

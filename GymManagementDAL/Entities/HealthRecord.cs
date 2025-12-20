@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GymManagementDAL.Entities
+﻿namespace GymManagementDAL.Entities
 {
-    // 1 to 1 Relationship with Member [Shared Pk] 
+    // 1 to 1 Relationship with Member [Shared PK]
     public class HealthRecord : BaseEntitiy
     {
-        // Id => Fk == Pk [Id]
+        #region Properties
+
         public decimal Height { get; set; }
         public decimal Weight { get; set; }
         public string BloodType { get; set; } = null!;
-        public string? Note { get; set;}
+        public string? Note { get; set; }
+
+        #endregion
     }
 }

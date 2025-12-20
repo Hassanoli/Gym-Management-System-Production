@@ -12,11 +12,17 @@ namespace GymManagementBLL.Services.Classes
 {
     public class MemberService : IMemberServices
     {
-        #region Fields & Constructor
+        #region Fields
         private readonly IUintOfWork _uintOfWork;
         private readonly IMapper _mapper;
         private readonly IAttachment_Service _attachment_Service;
-        public MemberService(IUintOfWork uintOfWork, IMapper mapper , IAttachment_Service attachment_Service)
+        #endregion
+
+        #region Constructor
+        public MemberService(
+            IUintOfWork uintOfWork,
+            IMapper mapper,
+            IAttachment_Service attachment_Service)
         {
             _uintOfWork = uintOfWork;
             _mapper = mapper;
@@ -43,21 +49,22 @@ namespace GymManagementBLL.Services.Classes
                 if (IsEmailExists(createMember.Email) || IsPhoneExists(createMember.Phone))
                     return false;
 
-                var PhotoName = _attachment_Service.Upload("Members" , createMember.PhotoFile);
+                var PhotoName = _attachment_Service.Upload("Members", createMember.PhotoFile);
 
                 if (string.IsNullOrEmpty(PhotoName))
-                    return false; 
+                    return false;
 
                 var member = _mapper.Map<Member>(createMember);
                 member.Photo = PhotoName;
 
                 _uintOfWork.GetRepository<Member>().Add(member);
-                var IsCreated =  _uintOfWork.SaveChanges() > 0;
+                var IsCreated = _uintOfWork.SaveChanges() > 0;
 
-                if(!IsCreated)
+                if (!IsCreated)
                 {
-                    _attachment_Service.Delete(PhotoName , "Members");
+                    _attachment_Service.Delete(PhotoName, "Members");
                 }
+
                 return IsCreated;
             }
             catch (Exception ex)
@@ -84,7 +91,10 @@ namespace GymManagementBLL.Services.Classes
             {
                 viewModel.MemberShipStartDate = activeMemberShip.CreatedAt.ToShortDateString();
                 viewModel.MemberShipEndDate = activeMemberShip.EndDate.ToShortDateString();
-                var plan = _uintOfWork.GetRepository<Plan>().GetById(activeMemberShip.PlanId);
+
+                var plan = _uintOfWork.GetRepository<Plan>()
+                    .GetById(activeMemberShip.PlanId);
+
                 viewModel.PlanName = plan?.Name;
             }
 
@@ -95,15 +105,16 @@ namespace GymManagementBLL.Services.Classes
         #region Get Health Record
         public HealthRecordViewModel? GetMemberHealthRecordDetails(int Memberid)
         {
-            // Based on your ModelSnapshot, HealthRecord is mapped to the Members table.
-            var memberHealthRecord = _uintOfWork.GetRepository<HealthRecord>().GetById(Memberid);
+            var memberHealthRecord =
+                _uintOfWork.GetRepository<HealthRecord>().GetById(Memberid);
+
             if (memberHealthRecord == null) return null;
 
             return _mapper.Map<HealthRecordViewModel>(memberHealthRecord);
         }
         #endregion
 
-        #region Get Member for Update
+        #region Get Member For Update
         public MemberToUpdateViewModel? GetMemberToUpdate(int MemberId)
         {
             var member = _uintOfWork.GetRepository<Member>().GetById(MemberId);
@@ -114,35 +125,62 @@ namespace GymManagementBLL.Services.Classes
         #endregion
 
         #region Update Member
-        public bool UpdateMemberDetails(int Id, MemberToUpdateViewModel memberToUpdate)
+        #region Update Member
+        public bool UpdateMemberDetails(int Id, MemberToUpdateViewModel model)
         {
             try
             {
-                var emailexits = _uintOfWork.GetRepository<Member>()
-                    .GetAll(X => X.Email == memberToUpdate.Email && X.Id != Id)
-                    .Any();
+                var memberRepo = _uintOfWork.GetRepository<Member>();
+                var member = memberRepo.GetById(Id);
 
-                var phoneexists = _uintOfWork.GetRepository<Member>()
-                    .GetAll(X => X.Phone == memberToUpdate.Phone && X.Id != Id)
-                    .Any();
+                if (member == null)
+                    return false;
 
-                if (emailexits || phoneexists) return false;
+                // Check email & phone uniqueness
+                bool emailExists = memberRepo
+                    .GetAll(x => x.Email == model.Email && x.Id != Id).Any();
 
+                bool phoneExists = memberRepo
+                    .GetAll(x => x.Phone == model.Phone && x.Id != Id).Any();
 
-                var MemberRepo = _uintOfWork.GetRepository<Member>();
-                var member = MemberRepo.GetById(Id);
-                if (member == null) return false;
+                if (emailExists || phoneExists)
+                    return false;
 
-                _mapper.Map(memberToUpdate, member);
+                // Update basic data
+                _mapper.Map(model, member);
                 member.UpdatedAt = DateTime.Now;
+
+                #region Photo Update
+
+                if (model.PhotoFile is not null)
+                {
+                    // Delete old photo
+                    if (!string.IsNullOrEmpty(member.Photo))
+                    {
+                        _attachment_Service.Delete(member.Photo, "Members");
+                    }
+
+                    // Upload new photo
+                    var newPhoto = _attachment_Service.Upload("Members", model.PhotoFile);
+
+                    if (!string.IsNullOrEmpty(newPhoto))
+                    {
+                        member.Photo = newPhoto;
+                    }
+                }
+
+                #endregion
+
                 return _uintOfWork.SaveChanges() > 0;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"--- UPDATE FAILED: {ex.Message} ---");
+                Console.WriteLine($"UPDATE FAILED: {ex.Message}");
                 return false;
             }
         }
+        #endregion
+
         #endregion
 
         #region Remove Member
@@ -165,7 +203,7 @@ namespace GymManagementBLL.Services.Classes
                 if (isDeleted)
                 {
                     _attachment_Service.Delete(member.Photo, "Members");
-                    return isDeleted;
+                    return true;
                 }
 
                 return false;
@@ -180,18 +218,21 @@ namespace GymManagementBLL.Services.Classes
                 return false;
             }
         }
-
         #endregion
 
         #region Helper Methods
         public bool IsEmailExists(string Email)
         {
-            return _uintOfWork.GetRepository<Member>().GetAll(X => X.Email == Email).Any();
+            return _uintOfWork.GetRepository<Member>()
+                .GetAll(X => X.Email == Email)
+                .Any();
         }
 
         public bool IsPhoneExists(string Phone)
         {
-            return _uintOfWork.GetRepository<Member>().GetAll(X => X.Phone == Phone).Any();
+            return _uintOfWork.GetRepository<Member>()
+                .GetAll(X => X.Phone == Phone)
+                .Any();
         }
 
         public bool IsEmailExists(string Email, int memberIdToExclude)
@@ -208,7 +249,6 @@ namespace GymManagementBLL.Services.Classes
                 .Any();
         }
 
-        // This method is correct and still needed
         public bool HasActiveSessions(int MemberId)
         {
             var memberSessions = _uintOfWork.GetRepository<MemberSession>()
@@ -217,7 +257,9 @@ namespace GymManagementBLL.Services.Classes
 
             if (!memberSessions.Any()) return false;
 
-            var sessionIds = memberSessions.Select(s => s.SessionId).ToList();
+            var sessionIds = memberSessions
+                .Select(s => s.SessionId)
+                .ToList();
 
             bool hasActiveMemberSessions = _uintOfWork.GetRepository<Session>()
                 .GetAll(x => sessionIds.Contains(x.Id) && x.StartDate > DateTime.Now)
@@ -226,6 +268,5 @@ namespace GymManagementBLL.Services.Classes
             return hasActiveMemberSessions;
         }
         #endregion
-
     }
 }

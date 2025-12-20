@@ -43,7 +43,7 @@ namespace GymManagementPL.Controllers
 
             if (session == null)
             {
-                TempData["ErrorMessage"] = "session not found.";
+                TempData["ErrorMessage"] = "Session not found.";
                 return RedirectToAction(nameof(Index));
             }
             return View(session);
@@ -67,19 +67,22 @@ namespace GymManagementPL.Controllers
                 return View(viewModel);
             }
 
+          
             var Result = _sessionService.CreateSession(viewModel);
 
-            if (Result)
+            if (Result.IsSuccess)
             {
-                TempData["SuccessMessage"] = "Session Created successfully.";
+             
+                TempData["SuccessMessage"] = Result.Message;
                 return RedirectToAction(nameof(Index));
             }
             else
             {
-                TempData["ErrorMessage"] = "Failed to Create Session.";
+             
+                TempData["ErrorMessage"] = Result.Message;
                 LoadTrainerDropDown();
                 LoadCatigoryDropDown();
-                return View(viewModel);
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -143,21 +146,24 @@ namespace GymManagementPL.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            // Now expecting OperationResult
             var Result = _sessionService.RemoveSession(id);
-            if (Result)
+
+            if (Result.IsSuccess)
             {
-                TempData["SuccessMessage"] = "Session Deleted successfully.";
+                TempData["SuccessMessage"] = Result.Message;
             }
             else
             {
-                TempData["ErrorMessage"] = "Failed to Delete Session.";
+                // Display the specific failure message from the service
+                TempData["ErrorMessage"] = Result.Message;
             }
             return RedirectToAction(nameof(Index));
         }
 
         #endregion
 
-        #region Helpers
+        #region Helper Methods
 
         private void LoadTrainerDropDown()
         {

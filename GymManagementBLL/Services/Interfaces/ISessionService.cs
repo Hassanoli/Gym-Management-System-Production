@@ -9,18 +9,32 @@ namespace GymManagementBLL.Services.Interfaces
 {
     public interface ISessionService
     {
+        #region Read
+
         IEnumerable<SessionViewModel> GetAllSessions();
-
         SessionViewModel? GetSessionById(int SessionId);
-
-        bool CreateSession(CreateSessionViewModel createSession);
-
         UpdateSessionViewModel? GetSessionToUpdate(int SessionId);
-        bool UpdateSession(UpdateSessionViewModel updateSession, int SessionId);
-        bool RemoveSession(int SessionId);
         IEnumerable<TrainerSelectViewModel> GetAllTrainersForDropDown();
         IEnumerable<CategorySelectViewModel> GetAllTCategoriesForDropDown();
 
+        #endregion
 
+        #region Create
+
+        OperationResult CreateSession(CreateSessionViewModel createSession);
+
+        #endregion
+
+        #region Update
+
+        bool UpdateSession(UpdateSessionViewModel updateSession, int SessionId);
+
+        #endregion
+
+        #region Delete
+
+        OperationResult RemoveSession(int SessionId);
+
+        #endregion
     }
 }

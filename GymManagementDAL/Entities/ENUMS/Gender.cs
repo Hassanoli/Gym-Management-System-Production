@@ -8,7 +8,11 @@ namespace GymManagementDAL.Entities.ENUMS
 {
     public enum Gender
     {
+        #region Values
+
         Male = 1,
-        Female,
+        Female
+
+        #endregion
     }
 }

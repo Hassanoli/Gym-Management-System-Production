@@ -10,7 +10,7 @@ namespace GymManagementBLL.ViewModels.TrainerViewModels
 {
     public class UpdateTrainerViewModel
     {
-        #region TrainerId
+        #region Trainer Id
         [Required(ErrorMessage = "Trainer ID is required.")]
         [Range(1, int.MaxValue, ErrorMessage = "Invalid Trainer ID.")]
         public int TrainerId { get; set; }
@@ -36,7 +36,7 @@ namespace GymManagementBLL.ViewModels.TrainerViewModels
         public string Phone { get; set; } = null!;
         #endregion
 
-        #region DateOfBirth
+        #region Date Of Birth
         [Required(ErrorMessage = "Date of birth is required.")]
         [DataType(DataType.Date)]
         public DateOnly DateOfBirth { get; set; }
@@ -56,15 +56,12 @@ namespace GymManagementBLL.ViewModels.TrainerViewModels
         [StringLength(30, MinimumLength = 2, ErrorMessage = "City name must be between 2 and 30 characters.")]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "City can contain only letters and spaces.")]
         public string City { get; set; } = null!;
-        #endregion
 
-        #region Street
         [Required(ErrorMessage = "Street is required.")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Street name must be between 2 and 50 characters.")]
         [RegularExpression(@"^[a-zA-Z0-9\s\.\-]+$", ErrorMessage = "Street can contain only letters, numbers, spaces, hyphens, or periods.")]
         public string Street { get; set; } = null!;
         #endregion
-
 
         #region Specialties
         [Required(ErrorMessage = "Specialty is required.")]

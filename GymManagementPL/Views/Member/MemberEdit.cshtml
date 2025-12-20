@@ -2,26 +2,51 @@
 @{
     ViewData["Title"] = "Member Edit";
 }
+
 <div class="container">
     <main role="main" class="pb-3">
-
 
         <div class="container mt-5">
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card card-details border-0 p-2 shadow">
                         <div class="card-body text-center">
+
+                            <!-- Profile Image -->
                             <div class="text-center mt-3">
-                                <img src="~/images/Members/@Model.Photo" alt="@Model.Name" class="rounded-circle"
-                                     style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #fff; margin-top: -60px;" />
+                                <img id="profileImage"
+                                     src="~/images/Members/@Model.Photo"
+                                     alt="@Model.Name"
+                                     class="rounded-circle"
+                                     style="width:120px;height:120px;object-fit:cover;border:3px solid #fff;margin-top:-60px;" />
                             </div>
+
                             <div class="card-body text-center">
                                 <h2 class="mb-1 text-primary-color">@Model.Name</h2>
-                                <form asp-action="MemberEdit" method="post">
-                                    <input asp-for="Name" hidden/>
-                                    <input asp-for="Photo" hidden/>
+
+                                <!-- FORM -->
+                                <form asp-action="MemberEdit"
+                                      method="post"
+                                      enctype="multipart/form-data">
+
+                                    <!-- Hidden -->
+                                    <input asp-for="Name" hidden />
+                                    <input asp-for="Photo" hidden />
+
+                                    <!-- Change Photo -->
+                                    <div class="mt-3 text-start">
+                                        <label class="form-label small text-muted">Change Profile Photo</label>
+                                        <input asp-for="PhotoFile"
+                                               type="file"
+                                               class="form-control"
+                                               accept=".jpg,.jpeg,.png"
+                                               onchange="previewPhoto(event)" />
+                                    </div>
+
+                                    <!-- Info -->
                                     <div class="mt-4 text-start">
                                         <div class="row g-3">
+
                                             <div class="col-12">
                                                 <div class="p-3 bg-light rounded">
                                                     <small class="text-muted d-block mb-1">Email</small>
@@ -29,6 +54,7 @@
                                                     <span asp-validation-for="Email" class="text-danger"></span>
                                                 </div>
                                             </div>
+
                                             <div class="col-6">
                                                 <div class="p-3 bg-light rounded">
                                                     <small class="text-muted d-block mb-1">Phone</small>
@@ -41,10 +67,10 @@
                                                 <div class="p-3 bg-light rounded">
                                                     <small class="text-muted d-block mb-1">Building Number</small>
                                                     <input asp-for="BuildingNumber" class="form-control" />
-                                                    <span asp-validation-for="BuildingNumber"
-                                                          class="text-danger"></span>
+                                                    <span asp-validation-for="BuildingNumber" class="text-danger"></span>
                                                 </div>
                                             </div>
+
                                             <div class="col-6">
                                                 <div class="p-3 bg-light rounded">
                                                     <small class="text-muted d-block mb-1">City</small>
@@ -52,6 +78,7 @@
                                                     <span asp-validation-for="City" class="text-danger"></span>
                                                 </div>
                                             </div>
+
                                             <div class="col-6">
                                                 <div class="p-3 bg-light rounded">
                                                     <small class="text-muted d-block mb-1">Street</small>
@@ -59,17 +86,23 @@
                                                     <span asp-validation-for="Street" class="text-danger"></span>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
 
-
+                                    <!-- Actions -->
                                     <div class="d-flex justify-content-between gap-2 mt-3 px-3 pb-3">
-                                        <a asp-controller="Member" asp-action="Index" class="btn btn-fill ">
-                                            Back to
-                                            List
+                                        <a asp-controller="Member"
+                                           asp-action="Index"
+                                           class="btn btn-fill">
+                                            Back to List
                                         </a>
-                                        <button type="submit" class="btn btn-fill ">Done</button>
+
+                                        <button type="submit" class="btn btn-fill">
+                                            Done
+                                        </button>
                                     </div>
+
                                 </form>
                             </div>
                         </div>
@@ -81,7 +114,14 @@
 
     </main>
 </div>
-@section Scripts
-{
+
+@section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function previewPhoto(event) {
+            const image = document.getElementById("profileImage");
+            image.src = URL.createObjectURL(event.target.files[0]);
+        }
+    </script>
 }
