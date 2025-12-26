@@ -149,6 +149,18 @@ Gym-Management-System-Production/
    - Visit [https://localhost:5001](https://localhost:5001) or [http://localhost:5000](http://localhost:5000)
    - The default route redirects to `/Account/Login`
 
+### 🔑 Demo Accounts
+
+For testing purposes, you can use the following pre-configured accounts:
+
+#### Super Admin
+- **Email**: `hassanmohamedali0113@gmail.com`
+- **Password**: `P@ssw0rd`
+
+#### Admin
+- **Email**: `ahmedrahmo@gmail.com`
+- **Password**: `P@ssw0rd`
+
 ---
 
 ## 🗄️ Database Schema
