@@ -16,6 +16,7 @@ namespace GymManagementBLL.ViewModels.BookingViewModels
         public string BookingDate { get; set; }
         public bool IsAttended { get; set; }
 
+        public DateTime? AttendanceDate { get; set; }
         #endregion
     }
 }

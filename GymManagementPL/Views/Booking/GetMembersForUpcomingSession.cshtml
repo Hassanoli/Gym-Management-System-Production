@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<MemberForSessionViewModel>
+
 @if (TempData["SuccessMessage"] is not null)
 {
     <div id="Alert" class="alert alert-success alert-dismissible fade show">
@@ -15,6 +16,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 }
+
 <header class="bg-primary text-white rounded-3 p-4 shadow-sm mt-5 mb-4">
     <div class="d-flex justify-content-between align-items-center">
         <div>
@@ -22,12 +24,15 @@
             <p class="mb-0 text-light opacity-75">Members That Already Book Session</p>
         </div>
         <div class="text-end">
-            <a asp-action="Create" asp-route-id="@ViewContext.RouteData.Values["id"]" class="btn btn-light">
+            <a asp-action="Create"
+               asp-route-id="@ViewContext.RouteData.Values["id"]"
+               class="btn btn-light">
                 <i class="fas fa-plus me-1"></i> New Booking
             </a>
         </div>
     </div>
 </header>
+
 <div class="card shadow-sm">
     <div class="card-body">
         @if (Model is not null && Model.Any())
@@ -48,17 +53,15 @@
                             <td>@member.BookingDate</td>
                             <td>
                                 <div class="d-flex justify-content-center gap-1">
-                                    <form method="post" asp-action="Cancel" class="m-0">
-                                        <input type="hidden" value="@member.MemberId" name="MemberId" />
-                                        <input type="hidden" value="@member.SessionId" name="SessionId" />
-                                        <button type="submit"
-                                                class="btn btn-sm btn-outline-danger px-3"
-                                                title="Cancel booking"
-                                                onclick="return confirm('⚠️ Cancel this booking?');">
-                                            <i class="fas fa-times me-1"></i> Cancel
-                                        </button>
-
-                                    </form>
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-danger px-3"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#cancelModal"
+                                            data-memberid="@member.MemberId"
+                                            data-sessionid="@member.SessionId"
+                                            data-membername="@member.MemberName">
+                                        <i class="fas fa-times me-1"></i> Cancel
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -68,8 +71,6 @@
         }
         else
         {
-
-
             <div class="text-center py-5">
                 <i class="bi bi-person-workspace display-1 text-muted"></i>
                 <h4 class="mt-3 text-muted">No Bookings Available</h4>
@@ -77,10 +78,51 @@
             </div>
         }
     </div>
-    <a asp-action="Index" class="btn btn-fill ">Back to List</a>
 
+    <a asp-action="Index" class="btn btn-fill">Back to List</a>
 </div>
+
+<!-- ================= Confirmation Modal ================= -->
+<div class="modal fade" id="cancelModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-body text-center p-5">
+                <p class="fs-4 text-primary-color mb-4">
+                    Are you sure you want to cancel booking for
+                    <strong id="memberNameText"></strong>?
+                </p>
+
+                <div class="alert alert-warning text-start">
+                    <strong>Warning!</strong>
+                    This action cannot be undone.
+                </div>
+
+                <form asp-action="Cancel" method="post" class="mt-4">
+                    <input type="hidden" name="MemberId" id="cancelMemberId" />
+                    <input type="hidden" name="SessionId" id="cancelSessionId" />
+
+                    <div class="d-flex justify-content-between gap-3">
+                        <button type="button"
+                                class="btn-outline flex-fill"
+                                data-bs-dismiss="modal">
+                            NO
+                        </button>
+
+                        <button type="submit"
+                                class="btn-fill flex-fill">
+                            Yes
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <script>
+    // Fade alerts
     document.addEventListener("DOMContentLoaded", function () {
         const alertBox = document.getElementById("Alert");
         if (alertBox) {
@@ -90,5 +132,19 @@
                 setTimeout(() => alertBox.remove(), 500);
             }, 1500);
         }
+    });
+
+    // Dynamic confirmation modal
+    const cancelModal = document.getElementById('cancelModal');
+    cancelModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+
+        const memberId = button.getAttribute('data-memberid');
+        const sessionId = button.getAttribute('data-sessionid');
+        const memberName = button.getAttribute('data-membername');
+
+        document.getElementById('cancelMemberId').value = memberId;
+        document.getElementById('cancelSessionId').value = sessionId;
+        document.getElementById('memberNameText').textContent = memberName;
     });
 </script>

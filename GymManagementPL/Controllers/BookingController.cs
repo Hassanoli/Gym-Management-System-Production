@@ -114,5 +114,25 @@ namespace GymManagementPL.Controllers
 
 
         #endregion
+
+        #region Mark As Attend
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ToggleAttendance(int memberId, int sessionId)
+        {
+            var result = _bookingService.ToggleAttendance(memberId, sessionId);
+
+            if (result.IsSuccess)
+                TempData["SuccessMessage"] = result.Message;
+            else
+                TempData["ErrorMessage"] = result.Message;
+
+            return RedirectToAction(
+                nameof(GetMembersForOngoingSession),
+                new { id = sessionId }
+            );
+        } 
+        #endregion
+
     }
 }

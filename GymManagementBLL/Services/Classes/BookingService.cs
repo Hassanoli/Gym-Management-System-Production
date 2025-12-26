@@ -137,5 +137,39 @@ namespace GymManagementBLL.Services.Classes
             return memberSelectList;
         }
         #endregion
+
+        public OperationResult ToggleAttendance(int memberId, int sessionId)
+        {
+            var booking = _unitOfWork.bookingRepository
+                .GetAll(b => b.MemberId == memberId && b.SessionId == sessionId)
+                .FirstOrDefault();
+
+            if (booking == null)
+            {
+                return new OperationResult
+                {
+                    IsSuccess = false,
+                    Message = "Booking not found"
+                };
+            }
+
+         
+            _unitOfWork.bookingRepository.Update(booking);
+
+        
+            booking.IsAttended = !booking.IsAttended;
+
+            _unitOfWork.SaveChanges();
+
+            return new OperationResult
+            {
+                IsSuccess = true,
+                Message = booking.IsAttended
+                    ? "Member marked as attended"
+                    : "Attendance removed"
+            };
+        }
+
+
     }
 }

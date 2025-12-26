@@ -1,22 +1,22 @@
-﻿namespace GymManagementDAL.Entities
-{
-    public class MemberSession : BaseEntitiy
+﻿    namespace GymManagementDAL.Entities
     {
-        #region Properties
+        public class MemberSession : BaseEntitiy
+        {
+            #region Properties
 
-        // BookingDate = CreatedAt
-        public bool IsAttended { get; set; }
+            // BookingDate = CreatedAt
+            public bool IsAttended { get; set; }
 
-        #endregion
+            #endregion
 
-        #region Relationships
+            #region Relationships
 
-        public int MemberId { get; set; }
-        public Member Member { get; set; } = null!;
+            public int MemberId { get; set; }
+            public Member Member { get; set; } = null!;
 
-        public int SessionId { get; set; }
-        public Session Session { get; set; } = null!;
+            public int SessionId { get; set; }
+            public Session Session { get; set; } = null!;
 
-        #endregion
+            #endregion
+        }
     }
-}

@@ -19,6 +19,9 @@ namespace GymManagementBLL.Services.Interfaces
 
         IEnumerable<MemberForSelectListViewModel> GetMemberForDropDown(int id);
 
+        OperationResult ToggleAttendance(int memberId, int sessionId);
+
+
         #endregion
 
         #region Create
